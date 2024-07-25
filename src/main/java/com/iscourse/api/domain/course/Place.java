@@ -9,18 +9,8 @@ public class Place extends BaseEntity {
     @Column(name = "place_id")
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private PlaceType placeType;
-    @Enumerated(EnumType.STRING)
-    private largeCategory largeCategory;
-    @Enumerated(EnumType.STRING)
-    private middleCategory middleCategory;
-    @Enumerated(EnumType.STRING)
-    private smallCategory smallCategory;
-    @Enumerated(EnumType.STRING)
-    private State state;
-    @Enumerated(EnumType.STRING)
-    private City city;
+    @Embedded
+    private PlaceInfo placeInfo;
 
     private String image;
 
