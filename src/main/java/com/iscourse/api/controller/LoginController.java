@@ -1,5 +1,6 @@
 package com.iscourse.api.controller;
 
+import com.iscourse.api.dto.LoginRequest;
 import com.iscourse.api.dto.member.SignUpMemberDto;
 import com.iscourse.api.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -16,5 +17,11 @@ public class LoginController {
     @ResponseStatus(HttpStatus.OK)
     public void signup(@RequestBody SignUpMemberDto sIgnUpMemberDto) {
         memberService.signup(sIgnUpMemberDto);
+    }
+
+    @PostMapping("/login")
+    @ResponseStatus(HttpStatus.OK)
+    public void login(@RequestBody LoginRequest loginRequest) {
+        // swagger 문서화를 위한 api, 실제 내용은 RestAuthenticationFilter 확인.
     }
 }

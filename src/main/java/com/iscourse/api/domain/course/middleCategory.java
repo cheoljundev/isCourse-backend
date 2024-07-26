@@ -16,6 +16,6 @@ public class middleCategory extends BaseTimeEntity implements Persistable<String
 
     @Override
     public boolean isNew() {
-        return createdAt == null;
+        return getCreatedAt() == null;
     }
 }

@@ -32,7 +32,7 @@ public class Member extends BaseEntity {
     @Embedded
     private SocialInfo socialInfo;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     List<MemberRole> memberRoles = new ArrayList<>();
 
 

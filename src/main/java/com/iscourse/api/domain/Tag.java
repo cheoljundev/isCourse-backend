@@ -16,6 +16,6 @@ public class Tag extends BaseEntity implements Persistable<TagType> {
 
     @Override
     public boolean isNew() {
-        return false;
+        return getCreatedAt() == null;
     }
 }
