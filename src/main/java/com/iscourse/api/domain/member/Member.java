@@ -21,12 +21,13 @@ public class Member extends BaseEntity {
 
     private String password;
 
+    @Enumerated(EnumType.STRING)
     private GenderType gender;
 
     private String nickname;
 
-    @OneToMany(mappedBy = "member")
-    private List<MemberInterest> interests;
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private final List<MemberInterest> interests = new ArrayList<>();
 
     @Embedded
     private SocialInfo socialInfo;
@@ -47,6 +48,12 @@ public class Member extends BaseEntity {
         memberRoles.add(memberRole);
         memberRole.setMember(this);
         return memberRole;
+    }
+
+    public MemberInterest addInterest(MemberInterest memberInterest) {
+        interests.add(memberInterest);
+        memberInterest.setMember(this);
+        return memberInterest;
     }
 
 }

@@ -1,0 +1,20 @@
+package com.iscourse.api.controller;
+
+import com.iscourse.api.dto.member.SignUpMemberDto;
+import com.iscourse.api.service.MemberService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/")
+public class LoginController {
+    private final MemberService memberService;
+
+    @PostMapping("/signup")
+    @ResponseStatus(HttpStatus.OK)
+    public void signup(@RequestBody SignUpMemberDto sIgnUpMemberDto) {
+        memberService.signup(sIgnUpMemberDto);
+    }
+}

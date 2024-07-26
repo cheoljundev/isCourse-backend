@@ -19,4 +19,18 @@ public class MemberInterest extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tag_id")
     private Tag tag;
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
+    private void setTag(Tag tag) {
+        this.tag = tag;
+    }
+
+    public static MemberInterest create(Tag tag) {
+        MemberInterest memberInterest = new MemberInterest();
+        memberInterest.setTag(tag);
+        return memberInterest;
+    }
 }
