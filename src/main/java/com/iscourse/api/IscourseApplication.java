@@ -1,5 +1,6 @@
 package com.iscourse.api;
 
+import com.iscourse.api.domain.member.GenderType;
 import com.iscourse.api.domain.member.Member;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,9 +18,9 @@ public class IscourseApplication {
         SpringApplication.run(IscourseApplication.class, args);
     }
 
-    @Bean
-    public AuditorAware<Member> auditorProvider() {
-        return () -> Optional.of(new Member());
-    }
+//    @Bean
+//    public AuditorAware<Member> auditorProvider() {
+//        return () -> Optional.of(new Member("tester", "1234", GenderType.MAN, "nick"));
+//    }
 
 }
