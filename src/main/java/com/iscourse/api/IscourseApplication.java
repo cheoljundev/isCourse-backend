@@ -18,9 +18,9 @@ public class IscourseApplication {
         SpringApplication.run(IscourseApplication.class, args);
     }
 
-//    @Bean
-//    public AuditorAware<Member> auditorProvider() {
-//        return () -> Optional.of(new Member("tester", "1234", GenderType.MAN, "nick"));
-//    }
+    @Bean
+    public AuditorAware<Member> auditorProvider() {
+        return () -> null;
+    }
 
 }
