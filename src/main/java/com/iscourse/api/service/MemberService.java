@@ -1,6 +1,7 @@
 package com.iscourse.api.service;
 
 import com.iscourse.api.domain.Tag;
+import com.iscourse.api.domain.TagType;
 import com.iscourse.api.domain.member.Member;
 import com.iscourse.api.domain.member.MemberInterest;
 import com.iscourse.api.domain.member.MemberRole;
@@ -22,7 +23,7 @@ public class MemberService {
     public void signup(SignUpMemberDto sIgnUpMemberDto) {
         Member member = new Member(sIgnUpMemberDto.getUsername(), passwordEncoder.encode(sIgnUpMemberDto.getPassword()), sIgnUpMemberDto.getGender(), sIgnUpMemberDto.getNickname());
         member.addRole(MemberRole.create(MemberRoleType.ROLE_USER));
-        for (String interest : sIgnUpMemberDto.getInterests()) {
+        for (TagType interest : sIgnUpMemberDto.getInterests()) {
             Tag tag = tagRepository.findById(interest).orElseThrow(IllegalArgumentException::new);
             member.addInterest(MemberInterest.create(tag));
         }
