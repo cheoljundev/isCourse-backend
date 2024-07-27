@@ -6,14 +6,13 @@ import lombok.Getter;
 import org.springframework.data.domain.Persistable;
 
 @Entity @Getter
-public class City {
-    @Id @GeneratedValue
-    @Column(name = "city_id")
+public class MiddleCategory{
+    @Id
+    @Column(name = "middle_category_id")
     private Long id;
     private String code;
     private String name;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
-    private State parent;
-
+    private LargeCategory parent;
 }

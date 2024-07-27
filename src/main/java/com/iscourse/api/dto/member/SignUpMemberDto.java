@@ -1,6 +1,5 @@
 package com.iscourse.api.dto.member;
 
-import com.iscourse.api.domain.TagType;
 import com.iscourse.api.domain.member.GenderType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,5 +16,5 @@ public class SignUpMemberDto {
     private String password;
     private GenderType gender;
     private String nickname;
-    private List<TagType> interests = new ArrayList<>();
+    private List<Long> interests = new ArrayList<>();
 }

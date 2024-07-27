@@ -1,5 +1,6 @@
 package com.iscourse.api.domain.course;
 
+import com.iscourse.api.domain.Tag;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -12,15 +13,15 @@ public class PlaceInfo {
 
     @ManyToOne
     @JoinColumn(name="large_category_id")
-    private largeCategory largeCategory;
+    private LargeCategory largeCategory;
 
     @ManyToOne
     @JoinColumn(name="middle_category_id")
-    private middleCategory middleCategory;
+    private MiddleCategory middleCategory;
 
     @ManyToOne
-    @JoinColumn(name="small_category_id")
-    private smallCategory smallCategory;
+    @JoinColumn(name="tag_id")
+    private Tag tag;
 
     @ManyToOne
     @JoinColumn(name="state_id")

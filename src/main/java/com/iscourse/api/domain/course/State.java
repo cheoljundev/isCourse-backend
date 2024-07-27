@@ -9,14 +9,11 @@ import lombok.Getter;
 import org.springframework.data.domain.Persistable;
 
 @Entity @Getter
-public class State extends BaseTimeEntity implements Persistable<String> {
-    @Id
+public class State {
+    @Id @GeneratedValue
     @Column(name = "state_id")
-    private String id;
+    private Long id;
+    private String code;
     private String name;
 
-    @Override
-    public boolean isNew() {
-        return getCreatedAt() == null;
-    }
 }
