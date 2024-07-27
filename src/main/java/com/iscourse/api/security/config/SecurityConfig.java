@@ -36,7 +36,9 @@ public class SecurityConfig {
                 .securityMatcher("/api/**")
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/images/**", "/js/**", "/favicon.*", "/*/icon-*").permitAll()
-                        .requestMatchers("/api","/api/login", "/api/signup").permitAll()
+                        .requestMatchers("/api","/api/signin", "/api/signup", "api/signout","/api/deal","/api/deal/**", "/api/course", "/api/course/**").permitAll()
+                        .requestMatchers("/api/manager/**").hasRole("MANAGER")
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(restAuthenticationFilter(http, authenticationManager), UsernamePasswordAuthenticationFilter.class)
