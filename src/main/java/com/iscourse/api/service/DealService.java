@@ -13,7 +13,4 @@ public class DealService {
     private final DealRepository dealRepository;
     private final DealQueryRepository dealQueryRepository;
 
-    public DealDto findOne(Long id) {
-        return dealQueryRepository.findOne(id);
-    }
 }
