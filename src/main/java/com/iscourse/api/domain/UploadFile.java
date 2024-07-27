@@ -1,8 +1,9 @@
 package com.iscourse.api.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
-@Entity
+@Entity @Getter
 public class UploadFile extends BaseEntity{
     @Id @GeneratedValue
     @Column(name = "upload_file_id")
@@ -11,6 +12,7 @@ public class UploadFile extends BaseEntity{
     private String storedFileName;
     private String fileType;
 
+    @Enumerated(EnumType.STRING)
     private RelatedType relatedType;
     private Long relatedId;
 }

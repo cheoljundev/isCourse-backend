@@ -2,6 +2,8 @@ package com.iscourse.api;
 
 import com.iscourse.api.domain.member.GenderType;
 import com.iscourse.api.domain.member.Member;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -23,4 +25,8 @@ public class IscourseApplication {
         return () -> null;
     }
 
+    @Bean
+    JPAQueryFactory jpaQueryFactory(EntityManager em) {
+        return new JPAQueryFactory(em);
+    }
 }

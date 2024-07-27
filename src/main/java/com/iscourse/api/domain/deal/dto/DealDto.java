@@ -1,10 +1,11 @@
 package com.iscourse.api.domain.deal.dto;
 
 import com.iscourse.api.domain.deal.Deal;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.iscourse.api.domain.dto.UploadFileDto;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class DealDto {
@@ -22,7 +23,9 @@ public class DealDto {
     private String mapx;
     private String mapy;
     private boolean parking;
+    private List<UploadFileDto> images;
 
+    @QueryProjection
     public DealDto(Deal deal) {
         this.station = deal.getStation();
         this.name = deal.getName();
