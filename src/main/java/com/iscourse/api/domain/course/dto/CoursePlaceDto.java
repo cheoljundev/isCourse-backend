@@ -1,5 +1,6 @@
 package com.iscourse.api.domain.course.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 
 @Data
@@ -10,6 +11,7 @@ public class CoursePlaceDto {
 
     private int position;
 
+    @QueryProjection
     public CoursePlaceDto(String state, String name, String image, int position) {
         this.state = state;
         this.name = name;

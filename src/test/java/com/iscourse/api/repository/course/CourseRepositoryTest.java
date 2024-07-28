@@ -30,7 +30,7 @@ class CourseRepositoryTest {
     @Test
     public void save() {
         // given
-        Course course = new Course(2, 10, "좋은 코스입니다!!", MemberRoleType.ROLE_USER);
+        Course course = new Course("나이스한 코스", 2, 10, "좋은 코스입니다!!", MemberRoleType.ROLE_USER);
         Tag tag = tagRepository.findById(1L).get();
         Place place = placeRepository.findById(2L).get();
         CourseTag courseTag = new CourseTag(course, tag);
