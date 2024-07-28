@@ -18,4 +18,23 @@ public class CoursePlace extends BaseEntity {
     private Place place;
 
     private int position;
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    private void setPlace(Place place) {
+        this.place = place;
+    }
+
+    private void setPosition(int position) {
+        this.position = position;
+    }
+
+    public static CoursePlace create(Place place, int position) {
+        CoursePlace coursePlace = new CoursePlace();
+        coursePlace.setPlace(place);
+        coursePlace.setPosition(position);
+        return coursePlace;
+    }
 }

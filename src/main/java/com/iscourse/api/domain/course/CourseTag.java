@@ -17,4 +17,18 @@ public class CourseTag extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tag_id")
     private Tag tag;
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    private void setTag(Tag smallCategory) {
+        this.tag = smallCategory;
+    }
+
+    public static CourseTag create(Tag tag) {
+        CourseTag courseTag = new CourseTag();
+        courseTag.setTag(tag);
+        return courseTag;
+    }
 }

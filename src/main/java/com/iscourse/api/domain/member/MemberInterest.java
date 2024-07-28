@@ -5,10 +5,12 @@ import com.iscourse.api.domain.Tag;
 import jakarta.persistence.*;
 import lombok.Getter;
 
-@Entity @Getter
+@Entity
+@Getter
 public class MemberInterest extends BaseEntity {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "member_interest_id")
     private Long id;
 
@@ -24,7 +26,7 @@ public class MemberInterest extends BaseEntity {
         this.member = member;
     }
 
-    private void setTag(Tag tag) {
+    private void setTag(Tag smallCategory) {
         this.tag = tag;
     }
 
