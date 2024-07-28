@@ -3,7 +3,6 @@ package com.iscourse.api.controller;
 import com.iscourse.api.domain.deal.dto.DealDto;
 import com.iscourse.api.domain.deal.dto.DealListDto;
 import com.iscourse.api.repository.deal.DealQueryRepository;
-import com.iscourse.api.service.DealService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/")
 public class DealController {
-    private final DealService dealService;
     private final DealQueryRepository dealQueryRepository;
 
     @GetMapping("/deal")

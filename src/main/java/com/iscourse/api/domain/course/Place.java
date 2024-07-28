@@ -4,14 +4,17 @@ import com.iscourse.api.domain.BaseEntity;
 import com.iscourse.api.domain.Tag;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
+@Entity @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Place extends BaseEntity {
     @Id @GeneratedValue
     @Column(name = "place_id")
     private Long id;
+
+    private String name;
 
     @ManyToOne
     @JoinColumn(name = "place_type_id")
@@ -44,10 +47,11 @@ public class Place extends BaseEntity {
     private String tel;
     private String image;
 
-    public Place(PlaceType placeType, LargeCategory largeCategory, MiddleCategory middleCategory,
+    public Place(PlaceType placeType, String name, LargeCategory largeCategory, MiddleCategory middleCategory,
                  Tag tag, State state, City city, String address1,
                  String address2, String mapx, String mapy, String tel, String image) {
         this.placeType = placeType;
+        this.name = name;
         this.largeCategory = largeCategory;
         this.middleCategory = middleCategory;
         this.tag = tag;

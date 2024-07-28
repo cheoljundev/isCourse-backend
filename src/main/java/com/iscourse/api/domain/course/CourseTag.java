@@ -3,8 +3,12 @@ package com.iscourse.api.domain.course;
 import com.iscourse.api.domain.BaseEntity;
 import com.iscourse.api.domain.Tag;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Entity
+@Entity @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CourseTag extends BaseEntity {
     @Id @GeneratedValue
     @Column(name = "course_tag_id")
@@ -18,17 +22,8 @@ public class CourseTag extends BaseEntity {
     @JoinColumn(name = "tag_id")
     private Tag tag;
 
-    public void setCourse(Course course) {
+    public CourseTag(Course course, Tag tag) {
         this.course = course;
-    }
-
-    private void setTag(Tag smallCategory) {
-        this.tag = smallCategory;
-    }
-
-    public static CourseTag create(Tag tag) {
-        CourseTag courseTag = new CourseTag();
-        courseTag.setTag(tag);
-        return courseTag;
+        this.tag = tag;
     }
 }

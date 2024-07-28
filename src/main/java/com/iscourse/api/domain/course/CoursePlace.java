@@ -2,10 +2,16 @@ package com.iscourse.api.domain.course;
 
 import com.iscourse.api.domain.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CoursePlace extends BaseEntity {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "course_place_id")
     private Long id;
 
@@ -23,18 +29,9 @@ public class CoursePlace extends BaseEntity {
         this.course = course;
     }
 
-    private void setPlace(Place place) {
+    public CoursePlace(Course course, Place place, int position) {
+        this.course = course;
         this.place = place;
-    }
-
-    private void setPosition(int position) {
         this.position = position;
-    }
-
-    public static CoursePlace create(Place place, int position) {
-        CoursePlace coursePlace = new CoursePlace();
-        coursePlace.setPlace(place);
-        coursePlace.setPosition(position);
-        return coursePlace;
     }
 }

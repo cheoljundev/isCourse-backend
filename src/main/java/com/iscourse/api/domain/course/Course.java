@@ -4,14 +4,14 @@ import com.iscourse.api.domain.BaseEntity;
 import com.iscourse.api.domain.member.MemberRoleType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Course extends BaseEntity {
+
     @Id
     @GeneratedValue
     @Column(name = "course_id")
@@ -23,14 +23,8 @@ public class Course extends BaseEntity {
     @Column(name = "minutes")
     private Integer minute;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private List<CourseTag> tags = new ArrayList<>();
-
     @Lob
     private String introduce;
-
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private List<CoursePlace> placeList = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private MemberRoleType courseType;
@@ -42,13 +36,4 @@ public class Course extends BaseEntity {
         this.courseType = courseType;
     }
 
-    public void addCourseTag(CourseTag courseTag) {
-        tags.add(courseTag);
-        courseTag.setCourse(this);
-    }
-
-    public void addCoursePlace(CoursePlace coursePlace) {
-        placeList.add(coursePlace);
-        coursePlace.setCourse(this);
-    }
 }
