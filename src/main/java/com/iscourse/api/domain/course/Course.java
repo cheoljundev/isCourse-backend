@@ -17,6 +17,8 @@ public class Course extends BaseEntity {
     @Column(name = "course_id")
     private Long id;
 
+    private String name;
+
     @Column(name = "hours")
     private Integer hour;
 
@@ -29,7 +31,8 @@ public class Course extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private MemberRoleType courseType;
 
-    public Course(Integer hour, Integer minute, String introduce, MemberRoleType courseType) {
+    public Course(String name, Integer hour, Integer minute, String introduce, MemberRoleType courseType) {
+        this.name = name;
         this.hour = hour;
         this.minute = minute;
         this.introduce = introduce;
