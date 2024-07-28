@@ -11,8 +11,7 @@ import java.util.List;
 public class CourseFrontDto {
 
     private String name;
-    private Integer hour;
-    private Integer minute;
+    private String time;
     private String introduce;
     private String state;
     private String nickname;
@@ -24,8 +23,7 @@ public class CourseFrontDto {
     @QueryProjection
     public CourseFrontDto(Course course) {
         this.name = course.getName();
-        this.hour = course.getHour();
-        this.minute = course.getMinute();
+        this.time = course.getHour() + "시간 " + course.getMinute() + "분";
         this.introduce = course.getIntroduce();
         this.likes = course.getLikes();
         if (course.getCreatedBy() != null) {
