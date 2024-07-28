@@ -31,12 +31,15 @@ public class Course extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private MemberRoleType courseType;
 
+    private int likes;
+
     public Course(String name, Integer hour, Integer minute, String introduce, MemberRoleType courseType) {
         this.name = name;
         this.hour = hour;
         this.minute = minute;
         this.introduce = introduce;
         this.courseType = courseType;
+        this.likes = 0;
     }
 
 }

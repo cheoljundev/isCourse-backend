@@ -14,9 +14,12 @@ public class CourseFrontDto {
     private Integer hour;
     private Integer minute;
     private String introduce;
+    private String state;
+    private String nickname;
     private List<String> tags = new ArrayList<>();
     private List<CoursePlaceDto> coursePlaces = new ArrayList<>();
     private String image;
+    private int likes;
 
     @QueryProjection
     public CourseFrontDto(Course course) {
@@ -24,5 +27,9 @@ public class CourseFrontDto {
         this.hour = course.getHour();
         this.minute = course.getMinute();
         this.introduce = course.getIntroduce();
+        this.likes = course.getLikes();
+        if (course.getCreatedBy() != null) {
+            this.nickname = course.getCreatedBy().getNickname();
+        }
     }
 }

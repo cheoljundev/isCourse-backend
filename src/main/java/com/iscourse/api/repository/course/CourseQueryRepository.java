@@ -49,6 +49,7 @@ public class CourseQueryRepository {
         tags.forEach(tag -> courseFrontDto.getTags().add(tag.getName()));
         coursePlaceList.forEach(coursePlace -> courseFrontDto.getCoursePlaces().add(coursePlace));
         courseFrontDto.setImage(coursePlaceList.get(0).getImage());
+        courseFrontDto.setState(coursePlaceList.get(0).getState());
 
         return courseFrontDto;
     }
