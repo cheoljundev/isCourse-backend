@@ -15,4 +15,12 @@ public class UploadFile extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private RelatedType relatedType;
     private Long relatedId;
+
+    public UploadFile(String originalFileName, String storedFileName, String fileType, RelatedType relatedType, Long relatedId) {
+        this.originalFileName = originalFileName;
+        this.storedFileName = storedFileName;
+        this.fileType = fileType;
+        this.relatedType = relatedType;
+        this.relatedId = relatedId;
+    }
 }

@@ -11,9 +11,9 @@ public class UploadFileDto {
     private String fileType;
 
     @QueryProjection
-    public UploadFileDto(UploadFile uploadFile) {
-        this.originalFileName = uploadFile.getOriginalFileName();
-        this.storedFileName = uploadFile.getStoredFileName();
-        this.fileType = uploadFile.getFileType();
+    public UploadFileDto(String originalFileName, String storedFileName, String fileType) {
+        this.originalFileName = originalFileName;
+        this.storedFileName = storedFileName;
+        this.fileType = fileType;
     }
 }
