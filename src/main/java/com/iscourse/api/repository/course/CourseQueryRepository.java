@@ -1,8 +1,9 @@
 package com.iscourse.api.repository.course;
 
 import com.iscourse.api.domain.Tag;
-import com.iscourse.api.domain.course.Place;
 import com.iscourse.api.domain.course.dto.*;
+import com.iscourse.api.domain.member.MemberRoleType;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -56,27 +57,28 @@ public class CourseQueryRepository {
 
     public Page<CourseFrontListDto> frontList(Pageable pageable) {
         JPAQuery<CourseFrontListDto> query = queryFactory
-                .select(new QCourseFrontListDto(course))
+                .select(new QCourseFrontListDto(
+                        course,
+                        JPAExpressions
+                                .select(coursePlace.place.state.name)
+                                .from(coursePlace)
+                                .where(coursePlace.course.id.eq(course.id))
+                                .limit(1),
+                        JPAExpressions
+                                .select(coursePlace.place.image)
+                                .from(coursePlace)
+                                .where(coursePlace.course.id.eq(course.id))
+                                .limit(1)
+                ))
                 .from(course)
+                .where(course.courseType.eq(MemberRoleType.ROLE_USER))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
 
         List<CourseFrontListDto> contents = query.fetch();
 
-        contents.forEach(content -> {
-            Place place = queryFactory
-                    .select(coursePlace.place)
-                    .from(coursePlace)
-                    .where(coursePlace.course.id.eq(content.getId()))
-                    .fetchOne();
-
-            content.setState(place.getState().getName());
-            content.setImage(place.getImage());
-        });
-
         int total = contents.size();
         return PageableExecutionUtils.getPage(contents, pageable, () -> total);
 
-        // todo: 조건에 따른 검색 추가 필요
     }
 }
