@@ -1,6 +1,7 @@
 package com.iscourse.api.service;
 
 import com.iscourse.api.domain.Tag;
+import com.iscourse.api.domain.dto.TagDto;
 import com.iscourse.api.domain.member.Member;
 import com.iscourse.api.domain.member.MemberInterest;
 import com.iscourse.api.domain.member.MemberRole;
@@ -11,6 +12,9 @@ import com.iscourse.api.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,5 +31,12 @@ public class MemberService {
             member.addInterest(MemberInterest.create(tag));
         }
         memberRepository.save(member);
+    }
+
+    public List<TagDto> getTags() {
+        List<Tag> tags = tagRepository.findAll();
+        return tags.stream()
+                .map(tag -> new TagDto(tag.getCode(), tag.getName()))
+                .collect(Collectors.toList());
     }
 }
