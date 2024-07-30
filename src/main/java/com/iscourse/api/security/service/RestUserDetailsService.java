@@ -24,6 +24,7 @@ public class RestUserDetailsService implements UserDetailsService {
         }
 
         MemberLoginDto memberLoginDto = new MemberLoginDto();
+        memberLoginDto.setId(member.getId());
         memberLoginDto.setUsername(member.getUsername());
         memberLoginDto.setPassword(member.getPassword());
         memberLoginDto.setMemberRoles(member.getMemberRoles());

@@ -42,4 +42,12 @@ public class Course extends BaseEntity {
         this.likes = 0;
     }
 
+    public void subtractLike() {
+        this.likes--;
+    }
+
+    public void addLike() {
+        this.likes++;
+    }
+
 }

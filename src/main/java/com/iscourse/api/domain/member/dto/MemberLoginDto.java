@@ -9,6 +9,7 @@ import java.util.List;
 
 @Data
 public class MemberLoginDto {
+    private Long id;
     private String username;
 
     private String password;

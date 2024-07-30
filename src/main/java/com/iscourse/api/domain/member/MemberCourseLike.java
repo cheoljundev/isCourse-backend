@@ -1,11 +1,11 @@
-package com.iscourse.api.domain.course;
+package com.iscourse.api.domain.member;
 
 
-import com.iscourse.api.domain.member.Member;
+import com.iscourse.api.domain.course.Course;
 import jakarta.persistence.*;
 
 @Entity
-public class UserCourseLike {
+public class MemberCourseLike {
     @Id @GeneratedValue
     @Column(name = "user_course_like_id")
     private Long id;
@@ -17,4 +17,9 @@ public class UserCourseLike {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id")
     private Course course;
+
+    public MemberCourseLike(Member member, Course course) {
+        this.member = member;
+        this.course = course;
+    }
 }

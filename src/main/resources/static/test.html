@@ -6,6 +6,9 @@
 </head>
 <body>
     <button onclick="sessoionTest()">sessiontest</button>
+    <button onclick="courseLike(1)">courseLike1</button>
+    <p class="course-name"></p>
+    <p class="course-likes"></p>
 </body>
 <script>
     // /api/login is post api
@@ -34,5 +37,38 @@
             console.log(data);
         })
     }
+
+    // /api/course-like/{id}
+    const courseLike = (id) => {
+        fetch(`http://localhost:8080/api/course-like/${id}`, {
+            method: 'PATCH',
+            credentials: 'include', // 쿠키를 포함시키기 위해 추가
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
+    }
+
+    // get : /api/course/{id}
+    const course = (id) => {
+        fetch(`http://localhost:8080/api/course/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.querySelector('.course-name').textContent = data.name;
+            document.querySelector('.course-likes').textContent = data.likes;
+        })
+    }
+
+    course(1);
+
 </script>
 </html>

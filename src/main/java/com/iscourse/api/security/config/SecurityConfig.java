@@ -61,17 +61,14 @@ public class SecurityConfig {
         return restAuthenticationFilter;
     }
 
-    @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowCredentials(true);
         config.setAllowedOrigins(List.of("http://localhost:63342"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        config.setAllowCredentials(true);
         config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept")); // 허용할 헤더
         config.setExposedHeaders(List.of("Authorization")); // 클라이언트가 접근할 수 있는 응답 헤더
-
+        config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
