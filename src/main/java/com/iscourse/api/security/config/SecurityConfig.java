@@ -36,8 +36,6 @@ public class SecurityConfig {
         authenticationManagerBuilder.authenticationProvider(authenticationProvider);
         AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
 
-        http.cors(cors ->  cors.configurationSource(corsConfigurationSource()));
-
         http
                 .securityMatcher("/api/**")
                 .authorizeHttpRequests(auth -> auth
@@ -48,6 +46,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/session-test").permitAll()
                         .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors ->  cors.configurationSource(corsConfigurationSource()))
                 .addFilterBefore(restAuthenticationFilter(http, authenticationManager), UsernamePasswordAuthenticationFilter.class)
                 .authenticationManager(authenticationManager)
         ;
@@ -70,8 +69,9 @@ public class SecurityConfig {
         config.setAllowedOrigins(List.of("http://localhost:63342"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowCredentials(true);
-        config.setAllowedHeaders(List.of("*"));
-        config.setExposedHeaders(List.of("*"));
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept")); // 허용할 헤더
+        config.setExposedHeaders(List.of("Authorization")); // 클라이언트가 접근할 수 있는 응답 헤더
+
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

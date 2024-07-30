@@ -24,6 +24,7 @@
     const sessoionTest = () => {
         fetch('http://localhost:8080/api/session-test', {
             method: 'GET',
+            credentials: 'include', // 쿠키를 포함시키기 위해 추가
             headers: {
                 'Content-Type': 'application/json',
             }
