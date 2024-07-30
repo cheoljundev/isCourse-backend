@@ -1,7 +1,6 @@
 package com.iscourse.api.security.config;
 
 import com.iscourse.api.security.filter.RestAuthenticationFilter;
-import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +14,11 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @EnableWebSecurity
 @Configuration
@@ -32,13 +36,16 @@ public class SecurityConfig {
         authenticationManagerBuilder.authenticationProvider(authenticationProvider);
         AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
 
+        http.cors(cors ->  cors.configurationSource(corsConfigurationSource()));
+
         http
                 .securityMatcher("/api/**")
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/images/**", "/js/**", "/favicon.*", "/*/icon-*").permitAll()
-                        .requestMatchers("/api","/api/signin", "/api/signup", "api/signout", "/api/tag","/api/deal","/api/deal/**", "/api/course", "/api/course/**").permitAll()
+                        .requestMatchers("/api", "/api/signin", "/api/signup", "api/signout", "/api/tag", "/api/deal", "/api/deal/**", "/api/course", "/api/course/**").permitAll()
                         .requestMatchers("/api/manager/**").hasRole("MANAGER")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/session-test").permitAll()
                         .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(restAuthenticationFilter(http, authenticationManager), UsernamePasswordAuthenticationFilter.class)
@@ -54,4 +61,22 @@ public class SecurityConfig {
         restAuthenticationFilter.setAuthenticationFailureHandler(authenticationFailureHandler);
         return restAuthenticationFilter;
     }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+
+        config.setAllowCredentials(true);
+        config.setAllowedOrigins(List.of("http://localhost:63342"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        config.setAllowCredentials(true);
+        config.setAllowedHeaders(List.of("*"));
+        config.setExposedHeaders(List.of("*"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
+    }
+
+
 }
