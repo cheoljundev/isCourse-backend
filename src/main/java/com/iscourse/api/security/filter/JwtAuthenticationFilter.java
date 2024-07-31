@@ -1,4 +1,4 @@
-package com.iscourse.api.security.jwt.filter;
+package com.iscourse.api.security.filter;
 
 import com.iscourse.api.domain.member.dto.MemberContext;
 import com.iscourse.api.security.jwt.JwtUtil;
