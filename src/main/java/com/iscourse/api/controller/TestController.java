@@ -7,19 +7,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 public class TestController {
-    @GetMapping("/test")
-    public String test() {
-        return "test";
-    }
-
-    @ResponseBody
     @GetMapping("/api/session-test")
-    public void sessionTest(@AuthenticationPrincipal MemberLoginDto memberLoginDto) {
-        Authentication authentication = SecurityContextHolder.getContextHolderStrategy().getContext().getAuthentication();
-        System.out.println("authentication = " + authentication);
-        System.out.println("memberContext = " + memberLoginDto);
+    public MemberLoginDto sessionTest(@AuthenticationPrincipal MemberLoginDto memberLoginDto) {
+        return memberLoginDto;
     }
 }
