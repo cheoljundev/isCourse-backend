@@ -3,10 +3,13 @@ package com.iscourse.api.domain.member;
 import com.iscourse.api.domain.BaseEntity;
 import com.iscourse.api.domain.Tag;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberInterest extends BaseEntity {
 
     @Id
@@ -22,17 +25,8 @@ public class MemberInterest extends BaseEntity {
     @JoinColumn(name = "tag_id")
     private Tag tag;
 
-    public void setMember(Member member) {
+    public MemberInterest(Member member, Tag tag) {
         this.member = member;
-    }
-
-    private void setTag(Tag smallCategory) {
         this.tag = tag;
-    }
-
-    public static MemberInterest create(Tag tag) {
-        MemberInterest memberInterest = new MemberInterest();
-        memberInterest.setTag(tag);
-        return memberInterest;
     }
 }

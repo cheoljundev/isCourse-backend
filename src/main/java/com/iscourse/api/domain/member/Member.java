@@ -26,16 +26,11 @@ public class Member extends BaseEntity {
 
     private String nickname;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private final List<MemberInterest> interests = new ArrayList<>();
-
     @Embedded
     private SocialInfo socialInfo;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     List<MemberRole> memberRoles = new ArrayList<>();
-
-
 
     public Member(String username, String password, GenderType gender, String nickname) {
         this.username = username;
@@ -48,12 +43,6 @@ public class Member extends BaseEntity {
         memberRoles.add(memberRole);
         memberRole.setMember(this);
         return memberRole;
-    }
-
-    public MemberInterest addInterest(MemberInterest memberInterest) {
-        interests.add(memberInterest);
-        memberInterest.setMember(this);
-        return memberInterest;
     }
 
 }

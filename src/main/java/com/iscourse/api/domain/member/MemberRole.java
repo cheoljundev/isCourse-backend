@@ -1,5 +1,6 @@
 package com.iscourse.api.domain.member;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.iscourse.api.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -16,6 +17,7 @@ public class MemberRole extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private MemberRoleType roleType;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
