@@ -4,14 +4,22 @@ import com.iscourse.api.domain.dto.TagDto;
 import com.iscourse.api.domain.member.dto.MemberContext;
 import com.iscourse.api.dto.LoginRequest;
 import com.iscourse.api.dto.member.SignUpMemberDto;
+import com.iscourse.api.security.jwt.JwtUtil;
+import com.iscourse.api.security.token.RestAuthenticationToken;
 import com.iscourse.api.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +30,9 @@ import java.util.List;
 @RequestMapping("/api/")
 public class LoginController {
     private final MemberService memberService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
+    private final UserDetailsService userDetailsService;
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.OK)
@@ -30,19 +41,19 @@ public class LoginController {
     }
 
     @PostMapping("/signin")
-    @ResponseStatus(HttpStatus.OK)
-    public void login(@RequestBody LoginRequest loginRequest) {
-        // swagger 문서화를 위한 api, 실제 내용은 RestAuthenticationFilter 확인.
-    }
+    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new RestAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
-    @GetMapping("/signout")
-    public String logout(HttpServletRequest request, HttpServletResponse response) {
-        Authentication authentication = SecurityContextHolder.getContextHolderStrategy().getContext().getAuthentication();
-        if (authentication != null) {
-            new SecurityContextLogoutHandler().logout(request, response, authentication);
+            // 인증 성공 후, 사용자 세부정보를 로드하여 JWT 생성
+            UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getUsername());
+            String jwt = jwtUtil.generateToken(userDetails.getUsername());
+            return ResponseEntity.ok(jwt); // JWT 토큰을 클라이언트에 반환
+        } catch (AuthenticationException e) {
+            // 인증 실패 시, 401 Unauthorized 상태 코드 반환
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
-
-        return "signout";
     }
 
     @GetMapping("/tag")
