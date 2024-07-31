@@ -1,14 +1,13 @@
 package com.iscourse.api.domain.member;
 
 import com.iscourse.api.domain.BaseEntity;
-import com.iscourse.api.domain.course.Course;
+import com.iscourse.api.domain.course.Place;
 import jakarta.persistence.*;
-import lombok.Getter;
 
-@Entity @Getter
-public class MemberCourse extends BaseEntity {
+@Entity
+public class MemberPlace extends BaseEntity {
     @Id @GeneratedValue
-    @Column(name = "member_course_id")
+    @Column(name = "member_place_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -16,6 +15,7 @@ public class MemberCourse extends BaseEntity {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "course_id")
-    private Course course;
+    @JoinColumn(name = "place_id")
+    private Place place;
+
 }
