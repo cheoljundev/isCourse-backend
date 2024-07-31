@@ -29,8 +29,6 @@ import java.util.List;
 public class SecurityConfig {
 
     private final AuthenticationProvider authenticationProvider;
-    private final AuthenticationSuccessHandler authenticationSuccessHandler;
-    private final AuthenticationFailureHandler authenticationFailureHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
@@ -54,19 +52,9 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors ->  cors.configurationSource(corsConfigurationSource()))
-//                .addFilterBefore(restAuthenticationFilter(http, authenticationManager), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-//                .authenticationManager(authenticationManager)
         ;
         return http.build();
-    }
-
-    private RestAuthenticationFilter restAuthenticationFilter(HttpSecurity http, AuthenticationManager authenticationManager) {
-        RestAuthenticationFilter restAuthenticationFilter = new RestAuthenticationFilter(http);
-        restAuthenticationFilter.setAuthenticationManager(authenticationManager);
-        restAuthenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
-        restAuthenticationFilter.setAuthenticationFailureHandler(authenticationFailureHandler);
-        return restAuthenticationFilter;
     }
 
     public CorsConfigurationSource corsConfigurationSource() {
