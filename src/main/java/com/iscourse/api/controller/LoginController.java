@@ -34,13 +34,13 @@ public class LoginController {
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
 
-    @PostMapping("/signup")
+    @PostMapping("signup")
     @ResponseStatus(HttpStatus.OK)
     public void signup(@RequestBody SignUpMemberDto sIgnUpMemberDto) {
         memberService.signup(sIgnUpMemberDto);
     }
 
-    @PostMapping("/signin")
+    @PostMapping("signin")
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -56,7 +56,7 @@ public class LoginController {
         }
     }
 
-    @GetMapping("/tag")
+    @GetMapping("tag")
     public List<TagDto> getTags() {
         return memberService.getTags();
     }

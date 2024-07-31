@@ -19,17 +19,17 @@ public class CourseController {
     private final CourseQueryRepository courseQueryRepository;
     private final CourseService courseService;
 
-    @GetMapping("/course")
+    @GetMapping("course")
     public Page<CourseFrontListDto> frontList(Pageable pageable) {
         return courseQueryRepository.frontList(pageable);
     }
 
-    @GetMapping("/course/{id}")
+    @GetMapping("course/{id}")
     public CourseFrontDto frontDetail(@PathVariable("id") Long id) {
         return courseQueryRepository.frontDetail(id);
     }
 
-    @PatchMapping("/course-like/{id}")
+    @PatchMapping("course-like/{id}")
     public void like(@PathVariable("id") Long courseId, @AuthenticationPrincipal MemberLoginDto memberLoginDto) {
         courseService.like(courseId, memberLoginDto.getId());
     }

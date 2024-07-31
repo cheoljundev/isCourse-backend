@@ -17,12 +17,12 @@ import java.util.List;
 public class DealController {
     private final DealQueryRepository dealQueryRepository;
 
-    @GetMapping("/deal")
+    @GetMapping("deal")
     public List<DealListDto> frontList() {
         return dealQueryRepository.findList();
     }
 
-    @GetMapping("/deal/{id}")
+    @GetMapping("deal/{id}")
     public DealDto frontDetail(@PathVariable("id") Long id) {
         return dealQueryRepository.findOne(id);
     }
