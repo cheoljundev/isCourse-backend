@@ -81,4 +81,31 @@ public class CourseQueryRepository {
         return PageableExecutionUtils.getPage(contents, pageable, () -> total);
 
     }
+
+    public Page<CourseFrontListDto> getMemberSharedList(Long memberId, Pageable pageable) {
+
+        JPAQuery<CourseFrontListDto> query = queryFactory
+                .select(new QCourseFrontListDto(
+                        course,
+                        JPAExpressions
+                                .select(coursePlace.place.state.name)
+                                .from(coursePlace)
+                                .where(coursePlace.course.id.eq(course.id))
+                                .limit(1),
+                        JPAExpressions
+                                .select(coursePlace.place.image)
+                                .from(coursePlace)
+                                .where(coursePlace.course.id.eq(course.id))
+                                .limit(1)
+                ))
+                .from(course)
+                .where(course.createdBy.id.eq(memberId))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize());
+
+        List<CourseFrontListDto> contents = query.fetch();
+
+        int total = contents.size();
+        return PageableExecutionUtils.getPage(contents, pageable, () -> total);
+    }
 }
