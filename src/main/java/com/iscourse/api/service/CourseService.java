@@ -59,7 +59,7 @@ public class CourseService {
     }
 
     @Transactional
-    public void shareCourse(CourseShareDto courseShareDto) {
+    public void share(CourseShareDto courseShareDto) {
         Course course = new Course(
                 courseShareDto.getName(),
                 courseShareDto.getHour(),

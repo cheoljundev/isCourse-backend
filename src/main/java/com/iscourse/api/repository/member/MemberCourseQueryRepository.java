@@ -21,7 +21,7 @@ import static com.iscourse.api.domain.member.QMemberCourse.memberCourse;
 public class MemberCourseQueryRepository {
     private final JPAQueryFactory queryFactory;
 
-    public Page<CourseFrontListDto> getMemberCourseList(Long memberId, Pageable pageable) {
+    public Page<CourseFrontListDto> getMemberSelectedList(Long memberId, Pageable pageable) {
 
         JPAQuery<CourseFrontListDto> query = queryFactory
                 .select(new QCourseFrontListDto(

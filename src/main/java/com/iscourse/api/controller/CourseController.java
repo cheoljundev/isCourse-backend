@@ -41,22 +41,23 @@ public class CourseController {
     }
 
     @PostMapping("select-course/{id}")
-    public void selectCourse(@PathVariable("id") Long courseId, @AuthenticationPrincipal MemberLoginDto memberLoginDto) {
+    public void select(@PathVariable("id") Long courseId, @AuthenticationPrincipal MemberLoginDto memberLoginDto) {
         courseService.selectCourse(courseId, memberLoginDto.getId());
     }
 
     @PostMapping("share-course")
-    public void shareCourse(@RequestBody CourseShareDto courseShareDto) {
-        courseService.shareCourse(courseShareDto);
+    public void share(@RequestBody CourseShareDto courseShareDto) {
+        courseService.share(courseShareDto);
     }
 
     @GetMapping("user/course")
-    public Page<CourseFrontListDto> getMemberCourseList(@AuthenticationPrincipal MemberLoginDto memberLoginDto, Pageable pageable) {
-        return memberCourseQueryRepository.getMemberCourseList(memberLoginDto.getId(), pageable);
+    public Page<CourseFrontListDto> getMemberSelectedList(@AuthenticationPrincipal MemberLoginDto memberLoginDto, Pageable pageable) {
+        return memberCourseQueryRepository.getMemberSelectedList(memberLoginDto.getId(), pageable);
     }
 
     @GetMapping("user/place")
     public Page<MemberPlace> getMemberPlaceList(Pageable pageable) {
         return memberPlaceQueryRepository.getMemberPlaceList(pageable);
     }
+
 }
