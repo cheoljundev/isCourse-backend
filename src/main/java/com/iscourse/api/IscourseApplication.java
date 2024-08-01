@@ -3,10 +3,12 @@ package com.iscourse.api;
 import com.iscourse.api.domain.member.GenderType;
 import com.iscourse.api.domain.member.Member;
 import com.iscourse.api.domain.member.dto.MemberContext;
+import com.iscourse.api.domain.member.dto.MemberLoginDto;
 import com.iscourse.api.repository.member.MemberRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +22,7 @@ import java.util.Optional;
 @EnableJpaAuditing
 @SpringBootApplication
 @RequiredArgsConstructor
+@Slf4j
 public class IscourseApplication {
 
     private final MemberRepository memberRepository;
@@ -33,12 +36,13 @@ public class IscourseApplication {
         return () -> {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-            if (authentication == null || !(authentication.getPrincipal() instanceof MemberContext)) {
+            if (authentication == null) {
                 return Optional.empty();
             }
 
-            MemberContext principal = (MemberContext) authentication.getPrincipal();
-            Long id = principal.getMemberLoginDto().getId();
+            MemberLoginDto principal = (MemberLoginDto) authentication.getPrincipal();
+
+            Long id = principal.getId();
 
             // Optional로 래핑하여 반환
             return memberRepository.findById(id);
