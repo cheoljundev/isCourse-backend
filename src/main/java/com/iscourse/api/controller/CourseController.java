@@ -2,6 +2,7 @@ package com.iscourse.api.controller;
 
 import com.iscourse.api.domain.course.dto.CourseFrontDto;
 import com.iscourse.api.domain.course.dto.CourseFrontListDto;
+import com.iscourse.api.domain.course.dto.CourseShareDto;
 import com.iscourse.api.domain.member.MemberPlace;
 import com.iscourse.api.domain.member.dto.MemberLoginDto;
 import com.iscourse.api.repository.course.CourseQueryRepository;
@@ -52,5 +53,10 @@ public class CourseController {
     @PostMapping("select-course/{id}")
     public void selectCourse(@PathVariable("id") Long courseId, @AuthenticationPrincipal MemberLoginDto memberLoginDto) {
         courseService.selectCourse(courseId, memberLoginDto.getId());
+    }
+
+    @PostMapping("share-course")
+    public void shareCourse(@RequestBody CourseShareDto courseShareDto) {
+        courseService.shareCourse(courseShareDto);
     }
 }

@@ -1,11 +1,16 @@
 package com.iscourse.api.service;
 
 import com.iscourse.api.domain.course.Course;
+import com.iscourse.api.domain.course.CoursePlace;
+import com.iscourse.api.domain.course.dto.CourseShareDto;
 import com.iscourse.api.domain.member.Member;
 import com.iscourse.api.domain.member.MemberCourse;
 import com.iscourse.api.domain.member.MemberCourseLike;
+import com.iscourse.api.domain.member.MemberRoleType;
 import com.iscourse.api.exception.DuplicateCourseException;
+import com.iscourse.api.repository.course.CoursePlaceRepository;
 import com.iscourse.api.repository.course.CourseRepository;
+import com.iscourse.api.repository.course.PlaceRepository;
 import com.iscourse.api.repository.member.MemberCourseLikeRepository;
 import com.iscourse.api.repository.member.MemberCourseRepository;
 import com.iscourse.api.repository.member.MemberRepository;
@@ -23,6 +28,8 @@ public class CourseService {
     private final CourseRepository courseRepository;
     private final MemberRepository memberRepository;
     private final MemberCourseRepository memberCourseRepository;
+    private final PlaceRepository placeRepository;
+    private final CoursePlaceRepository coursePlaceRepository;
 
     @Transactional
     public void like(Long courseId, Long memberId) {
@@ -49,5 +56,25 @@ public class CourseService {
         });
 
         memberCourseRepository.save(new MemberCourse(member, course));
+    }
+
+    @Transactional
+    public void shareCourse(CourseShareDto courseShareDto) {
+        Course course = new Course(
+                courseShareDto.getName(),
+                courseShareDto.getHour(),
+                courseShareDto.getMinute(),
+                courseShareDto.getIntroduce(),
+                MemberRoleType.ROLE_USER
+        );
+        courseRepository.save(course);
+        for (int i = 0; i < courseShareDto.getPlaceIdList().size(); i++) {
+            CoursePlace coursePlace = new CoursePlace(
+                    course,
+                    placeRepository.findById(courseShareDto.getPlaceIdList().get(i)).orElseThrow(IllegalArgumentException::new),
+                    i
+            );
+            coursePlaceRepository.save(coursePlace);
+        }
     }
 }
