@@ -2,12 +2,12 @@ package com.iscourse.api.controller;
 
 import com.iscourse.api.domain.deal.dto.DealDto;
 import com.iscourse.api.domain.deal.dto.DealListDto;
+import com.iscourse.api.domain.member.dto.MemberLoginDto;
 import com.iscourse.api.repository.deal.DealQueryRepository;
+import com.iscourse.api.service.DealService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,6 +16,7 @@ import java.util.List;
 @RequestMapping("/api/")
 public class DealController {
     private final DealQueryRepository dealQueryRepository;
+    private final DealService dealService;
 
     @GetMapping("deal")
     public List<DealListDto> frontList() {
@@ -25,5 +26,10 @@ public class DealController {
     @GetMapping("deal/{id}")
     public DealDto frontDetail(@PathVariable("id") Long id) {
         return dealQueryRepository.findOne(id);
+    }
+
+    @PostMapping("purchase-deal/{id}")
+    public void purchase(@AuthenticationPrincipal MemberLoginDto memberLoginDto, @PathVariable("id") Long dealId) {
+        dealService.purchase(memberLoginDto.getId(), dealId);
     }
 }
