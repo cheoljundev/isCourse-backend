@@ -25,6 +25,7 @@ public class MemberPlaceQueryRepository {
     public Page<MemberPlace> getMemberPlaceList(Pageable pageable) {
         JPAQuery<MemberPlace> query = queryFactory
                 .selectFrom(memberPlace)
+                .where(memberPlace.enabled.eq(true))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
         List<MemberPlace> contents = query.fetch();

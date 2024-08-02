@@ -27,13 +27,13 @@ public class CourseQueryRepository {
         CourseFrontDto courseFrontDto = queryFactory
                 .select(new QCourseFrontDto(course))
                 .from(course)
-                .where(course.id.eq(id))
+                .where(course.id.eq(id), course.enabled.eq(true))
                 .fetchOne();
 
         List<Tag> tags = queryFactory
                 .select(courseTag.tag)
                 .from(courseTag)
-                .where(courseTag.course.id.eq(id))
+                .where(courseTag.course.id.eq(id), courseTag.enabled.eq(true))
                 .fetch();
 
         List<CoursePlaceDto> coursePlaceList = queryFactory
@@ -44,7 +44,7 @@ public class CourseQueryRepository {
                         coursePlace.position
                 ))
                 .from(coursePlace)
-                .where(coursePlace.course.id.eq(id))
+                .where(coursePlace.course.id.eq(id), coursePlace.enabled.eq(true))
                 .fetch();
 
         tags.forEach(tag -> courseFrontDto.getTags().add(tag.getName()));
@@ -71,7 +71,7 @@ public class CourseQueryRepository {
                                 .limit(1)
                 ))
                 .from(course)
-                .where(course.courseType.eq(MemberRoleType.ROLE_USER))
+                .where(course.courseType.eq(MemberRoleType.ROLE_USER), course.enabled.eq(true))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
 
@@ -99,7 +99,7 @@ public class CourseQueryRepository {
                                 .limit(1)
                 ))
                 .from(course)
-                .where(course.createdBy.id.eq(memberId))
+                .where(course.createdBy.id.eq(memberId), course.enabled.eq(true))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
 
