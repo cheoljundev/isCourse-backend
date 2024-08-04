@@ -34,6 +34,16 @@ public class Course extends BaseEntity {
 
     private int likes;
 
+    private Double mapx;
+    private Double mapy;
+
+    public void setAxis(Double mapx, Double mapy) {
+        if (this.mapx == null || this.mapy == null) {
+            this.mapx = mapx;
+            this.mapy = mapy;
+        }
+    }
+
     public Course(String name, Integer hour, Integer minute, String introduce, MemberRoleType courseType) {
         this.name = name;
         this.hour = hour;

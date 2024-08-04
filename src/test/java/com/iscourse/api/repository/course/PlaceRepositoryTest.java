@@ -31,7 +31,7 @@ class PlaceRepositoryTest {
         LargeCategory largeCategory = largeCategoryRepository.findById(1L).get();
         MiddleCategory middleCategory = middleCategoryRepository.findById(1L).get();
         Tag tag = tagRepository.findById(1L).get();
-        Place place = new Place(placeType, "제이스텔라", largeCategory, middleCategory, tag, state, city, "서울시 강남구 11", "강남빌딩 202호", "00000", "00000", "0212341234", "http://image.com/image.png");
+        Place place = new Place(placeType, "제이스텔라", largeCategory, middleCategory, tag, state, city, "서울시 강남구 11", "강남빌딩 202호", 129.0598281416, 35.1448074253, "0212341234", "http://image.com/image.png");
         //when
         placeRepository.save(place);
         //then

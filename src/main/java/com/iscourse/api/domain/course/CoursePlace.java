@@ -33,5 +33,6 @@ public class CoursePlace extends BaseEntity {
         this.course = course;
         this.place = place;
         this.position = position;
+        course.setAxis(place.getMapx(), place.getMapy());
     }
 }

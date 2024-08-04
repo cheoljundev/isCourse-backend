@@ -42,14 +42,14 @@ public class Place extends BaseEntity {
 
     private String address1;
     private String address2;
-    private String mapx;
-    private String mapy;
+    private Double mapx;
+    private Double mapy;
     private String tel;
     private String image;
 
     public Place(PlaceType placeType, String name, LargeCategory largeCategory, MiddleCategory middleCategory,
                  Tag tag, State state, City city, String address1,
-                 String address2, String mapx, String mapy, String tel, String image) {
+                 String address2, Double mapx, Double mapy, String tel, String image) {
         this.placeType = placeType;
         this.name = name;
         this.largeCategory = largeCategory;

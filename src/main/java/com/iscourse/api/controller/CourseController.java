@@ -50,6 +50,11 @@ public class CourseController {
         courseService.share(courseShareDto);
     }
 
+    @GetMapping("recommend-course")
+    public Page<CourseFrontListDto> recommend(@RequestBody RecommendCourseConditionDto condition) {
+        return courseQueryRepository.recommendCourse(condition.getMapx(), condition.getMapy(), condition.getMaxDistance());
+    }
+
     @GetMapping("user/course")
     public Page<CourseFrontListDto> getMemberSelectedList(@AuthenticationPrincipal MemberLoginDto memberLoginDto, Pageable pageable) {
         return memberCourseQueryRepository.getMemberSelectedList(memberLoginDto.getId(), pageable);

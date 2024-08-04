@@ -3,6 +3,8 @@ package com.iscourse.api.repository.course;
 import com.iscourse.api.domain.Tag;
 import com.iscourse.api.domain.course.dto.*;
 import com.iscourse.api.domain.member.MemberRoleType;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -107,5 +109,37 @@ public class CourseQueryRepository {
 
         int total = contents.size();
         return PageableExecutionUtils.getPage(contents, pageable, () -> total);
+    }
+
+    public Page<CourseFrontListDto> recommendCourse(double mapx, double mapy, Integer maxDistance) {
+        NumberExpression<Double> distance = Expressions.numberTemplate(
+                Double.class,
+                "6371 * ACOS(COS(RADIANS({0})) * COS(RADIANS({1})) * COS(RADIANS({2}) - RADIANS({3})) + SIN(RADIANS({0})) * SIN(RADIANS({1}))) * 1000",
+                mapx, course.mapx, course.mapy, mapy
+        );
+
+        JPAQuery<CourseFrontListDto> query = queryFactory
+                .select(new QCourseFrontListDto(
+                        course,
+                        JPAExpressions
+                                .select(coursePlace.place.state.name)
+                                .from(coursePlace)
+                                .where(coursePlace.course.id.eq(course.id))
+                                .limit(1),
+                        JPAExpressions
+                                .select(coursePlace.place.image)
+                                .from(coursePlace)
+                                .where(coursePlace.course.id.eq(course.id))
+                                .limit(1)
+                ))
+                .from(course)
+                .where(course.enabled.eq(true), distance.loe(maxDistance))
+                .offset(0)
+                .limit(10);
+
+        List<CourseFrontListDto> contents = query.fetch();
+
+        int total = contents.size();
+        return PageableExecutionUtils.getPage(contents, Pageable.unpaged(), () -> total);
     }
 }
