@@ -36,7 +36,7 @@ public class IscourseApplication {
         return () -> {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-            if (authentication.getPrincipal() == "anonymousUser") {
+            if (authentication == null || authentication.getPrincipal() == "anonymousUser") {
                 return Optional.empty();
             }
 

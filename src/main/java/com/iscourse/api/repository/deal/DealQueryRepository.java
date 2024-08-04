@@ -1,10 +1,7 @@
 package com.iscourse.api.repository.deal;
 
 import com.iscourse.api.domain.RelatedType;
-import com.iscourse.api.domain.deal.dto.DealDto;
-import com.iscourse.api.domain.deal.dto.DealListDto;
-import com.iscourse.api.domain.deal.dto.QDealDto;
-import com.iscourse.api.domain.deal.dto.QDealListDto;
+import com.iscourse.api.domain.deal.dto.*;
 import com.iscourse.api.domain.dto.QUploadFileDto;
 import com.iscourse.api.domain.dto.UploadFileDto;
 import com.querydsl.jpa.JPAExpressions;
@@ -12,6 +9,9 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -85,5 +85,25 @@ public class DealQueryRepository {
         }
         return dealDto;
 
+    }
+
+    public Page<DealAdminListDto> findAdminList(String name, Integer minPrice, Integer maxPrice, Pageable pageable) {
+
+        JPQLQuery<DealAdminListDto> query = queryFactory
+                .select(new QDealAdminListDto(
+                        deal
+                ))
+                .from(deal)
+                .where(deal.name.contains(name)
+                        .and(deal.price.goe(minPrice))
+                        .and(deal.price.loe(maxPrice))
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize());
+
+        List<DealAdminListDto> contents = query.fetch();
+
+        int total = contents.size();
+        return PageableExecutionUtils.getPage(contents, pageable, () -> total);
     }
 }

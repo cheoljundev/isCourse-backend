@@ -1,11 +1,14 @@
 package com.iscourse.api.controller;
 
+import com.iscourse.api.domain.deal.dto.DealAdminListDto;
 import com.iscourse.api.domain.deal.dto.DealDto;
 import com.iscourse.api.domain.deal.dto.DealListDto;
 import com.iscourse.api.domain.member.dto.MemberLoginDto;
 import com.iscourse.api.repository.deal.DealQueryRepository;
 import com.iscourse.api.service.DealService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,5 +34,12 @@ public class DealController {
     @PostMapping("purchase-deal/{id}")
     public void purchase(@AuthenticationPrincipal MemberLoginDto memberLoginDto, @PathVariable("id") Long dealId) {
         dealService.purchase(memberLoginDto.getId(), dealId);
+    }
+
+    // 매니저 권한
+
+    @GetMapping("manager/deal")
+    public Page<DealAdminListDto> adminList(@RequestBody DealAdminConditionDto condition, Pageable pageable) {
+        return dealQueryRepository.findAdminList(condition.getName(), condition.getMinPrice(), condition.getMaxPrice(), pageable);
     }
 }
