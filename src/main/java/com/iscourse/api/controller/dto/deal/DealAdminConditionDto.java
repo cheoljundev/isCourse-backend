@@ -1,4 +1,4 @@
-package com.iscourse.api.controller;
+package com.iscourse.api.controller.dto.deal;
 
 import lombok.Data;
 

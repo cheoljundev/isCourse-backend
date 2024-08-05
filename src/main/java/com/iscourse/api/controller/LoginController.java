@@ -1,26 +1,19 @@
 package com.iscourse.api.controller;
 
 import com.iscourse.api.domain.dto.TagDto;
-import com.iscourse.api.domain.member.dto.MemberContext;
-import com.iscourse.api.dto.LoginRequest;
+import com.iscourse.api.controller.dto.login.LoginRequest;
 import com.iscourse.api.dto.member.SignUpMemberDto;
 import com.iscourse.api.security.jwt.JwtUtil;
 import com.iscourse.api.security.token.RestAuthenticationToken;
 import com.iscourse.api.service.MemberService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

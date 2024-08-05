@@ -1,8 +1,8 @@
 package com.iscourse.api.controller;
 
+import com.iscourse.api.controller.dto.course.RecommendCourseConditionDto;
 import com.iscourse.api.domain.course.dto.CourseFrontDto;
 import com.iscourse.api.domain.course.dto.CourseFrontListDto;
-import com.iscourse.api.domain.course.dto.CourseShareDto;
 import com.iscourse.api.domain.member.MemberPlace;
 import com.iscourse.api.domain.member.dto.MemberLoginDto;
 import com.iscourse.api.repository.course.CourseQueryRepository;

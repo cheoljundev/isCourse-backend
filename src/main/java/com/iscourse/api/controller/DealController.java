@@ -1,5 +1,6 @@
 package com.iscourse.api.controller;
 
+import com.iscourse.api.controller.dto.deal.DealAdminConditionDto;
 import com.iscourse.api.domain.deal.dto.DealAdminListDto;
 import com.iscourse.api.domain.deal.dto.DealDto;
 import com.iscourse.api.domain.deal.dto.DealListDto;

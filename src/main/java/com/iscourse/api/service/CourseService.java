@@ -3,7 +3,7 @@ package com.iscourse.api.service;
 import com.iscourse.api.domain.course.Course;
 import com.iscourse.api.domain.course.CoursePlace;
 import com.iscourse.api.domain.course.Place;
-import com.iscourse.api.domain.course.dto.CourseShareDto;
+import com.iscourse.api.controller.CourseShareDto;
 import com.iscourse.api.domain.member.Member;
 import com.iscourse.api.domain.member.MemberCourse;
 import com.iscourse.api.domain.member.MemberCourseLike;

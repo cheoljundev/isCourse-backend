@@ -1,4 +1,4 @@
-package com.iscourse.api.dto;
+package com.iscourse.api.controller.dto.login;
 
 import lombok.Data;
 
