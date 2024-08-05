@@ -180,4 +180,12 @@ public class CourseService {
             courseTagRepository.save(courseTag);
         }
     }
+
+    @Transactional
+    public void deleteCourse(Long id) {
+        Course course = courseRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        course.delete();
+        coursePlaceRepository.findByCourse(course).forEach(CoursePlace::delete);
+        courseTagRepository.findByCourse(course).forEach(CourseTag::delete);
+    }
 }

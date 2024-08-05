@@ -70,4 +70,8 @@ public class Course extends BaseEntity {
         this.mapy = null;
     }
 
+    public void delete() {
+        this.enabled = false;
+    }
+
 }
