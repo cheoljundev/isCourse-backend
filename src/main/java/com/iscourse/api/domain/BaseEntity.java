@@ -19,6 +19,6 @@ public abstract class BaseEntity extends BaseTimeEntity {
     @JoinColumn(name= "created_by")
     private Member createdBy;
 
-    private Boolean enabled = true;
+    protected Boolean enabled = true;
 
 }

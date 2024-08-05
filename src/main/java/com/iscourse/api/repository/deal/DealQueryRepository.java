@@ -78,7 +78,7 @@ public class DealQueryRepository {
                             uploadFile.fileType
                     ))
                     .from(uploadFile)
-                    .where(uploadFile.relatedType.eq(RelatedType.DEAL).and(uploadFile.relatedId.eq(id)))
+                    .where(uploadFile.relatedType.eq(RelatedType.DEAL).and(uploadFile.relatedId.eq(id)), uploadFile.enabled.eq(true))
                     .fetch();
 
             dealDto.setImages(images);

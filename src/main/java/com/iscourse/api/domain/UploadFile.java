@@ -1,9 +1,12 @@
 package com.iscourse.api.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UploadFile extends BaseEntity{
     @Id @GeneratedValue
     @Column(name = "upload_file_id")
@@ -22,5 +25,9 @@ public class UploadFile extends BaseEntity{
         this.fileType = fileType;
         this.relatedType = relatedType;
         this.relatedId = relatedId;
+    }
+
+    public void delete() {
+        this.enabled = false;
     }
 }

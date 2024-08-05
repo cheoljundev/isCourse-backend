@@ -52,4 +52,9 @@ public class DealController {
         dealService.add(files, addDealDto);
     }
 
+    @PatchMapping("manager/deal/{id}")
+    public void update(@PathVariable("id") Long id, @RequestPart("files") List<MultipartFile> files, @RequestPart("data") AddDealDto addDealDto) throws IOException {
+        dealService.update(id, files, addDealDto);
+    }
+
 }

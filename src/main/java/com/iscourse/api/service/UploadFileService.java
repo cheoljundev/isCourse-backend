@@ -44,4 +44,10 @@ public class UploadFileService {
         // 파일 저장
         file.transferTo(new File(filePath));
     }
+
+    @Transactional
+    public void delete(Long id) {
+        UploadFile uploadFile = uploadFileRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        uploadFile.delete();
+    }
 }
