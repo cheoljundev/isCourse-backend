@@ -27,11 +27,11 @@ public class Deal extends BaseEntity {
     private String address1;
     private String address2;
     private String contact;
-    private String mapx;
-    private String mapy;
+    private Double mapx;
+    private Double mapy;
     private Boolean parking;
 
-    public Deal(String station, String name, String product, Integer beforePrice, Integer price, Integer discountRate, String opening, String closing, String address1, String address2, String contact, String mapx, String mapy, boolean parking) {
+    public Deal(String station, String name, String product, Integer beforePrice, Integer price, Integer discountRate, String opening, String closing, String address1, String address2, String contact, Double mapx, Double mapy, boolean parking) {
         this.station = station;
         this.name = name;
         this.product = product;

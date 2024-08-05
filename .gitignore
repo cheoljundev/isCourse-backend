@@ -48,3 +48,4 @@ out/
 .DS_Store
 .AppleDouble
 .LSOverride
+/upload/

@@ -20,8 +20,8 @@ public class DealDto {
     private String address1;
     private String address2;
     private String contact;
-    private String mapx;
-    private String mapy;
+    private Double mapx;
+    private Double mapy;
     private boolean parking;
     private List<UploadFileDto> images;
 

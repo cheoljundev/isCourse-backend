@@ -1,5 +1,6 @@
 package com.iscourse.api.controller;
 
+import com.iscourse.api.controller.dto.deal.AddDealDto;
 import com.iscourse.api.controller.dto.deal.DealAdminConditionDto;
 import com.iscourse.api.domain.deal.dto.DealAdminListDto;
 import com.iscourse.api.domain.deal.dto.DealDto;
@@ -12,7 +13,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -43,4 +46,10 @@ public class DealController {
     public Page<DealAdminListDto> adminList(@RequestBody DealAdminConditionDto condition, Pageable pageable) {
         return dealQueryRepository.findAdminList(condition.getName(), condition.getMinPrice(), condition.getMaxPrice(), pageable);
     }
+
+    @PostMapping("manager/deal")
+    public void add(@RequestPart("file")MultipartFile file, @RequestPart("data") AddDealDto addDealDto) throws IOException {
+        dealService.add(file, addDealDto);
+    }
+
 }
