@@ -31,7 +31,7 @@ public class DealController {
     }
 
     @GetMapping("deal/{id}")
-    public DealDto frontDetail(@PathVariable("id") Long id) {
+    public DealDto detail(@PathVariable("id") Long id) {
         return dealQueryRepository.findOne(id);
     }
 
