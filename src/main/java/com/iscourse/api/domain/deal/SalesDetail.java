@@ -26,4 +26,8 @@ public class SalesDetail extends BaseEntity {
         this.deal = deal;
         this.member = member;
     }
+
+    public void delete() {
+        this.enabled = false;
+    }
 }

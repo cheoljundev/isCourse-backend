@@ -70,5 +70,10 @@ public class DealController {
         return salesDetailQueryRepository.findList(pageable);
     }
 
+    @DeleteMapping("manager/sales/deal/{id}")
+    public void deleteSales(@PathVariable("id") Long id) {
+        dealService.deleteSalesDetail(id);
+    }
+
 
 }

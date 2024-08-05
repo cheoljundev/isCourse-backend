@@ -95,4 +95,11 @@ public class DealService {
         uploadFileRepository.findByRelatedId(deal.getId()).forEach(UploadFile::delete);
         deal.delete();
     }
+
+    @Transactional
+    public void deleteSalesDetail(Long id) {
+        SalesDetail salesDetail = salesDetailRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        salesDetail.delete();
+        // TODO: 추후 환불 로직도 필요.
+    }
 }
