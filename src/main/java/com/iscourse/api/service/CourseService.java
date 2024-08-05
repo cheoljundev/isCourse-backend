@@ -3,7 +3,7 @@ package com.iscourse.api.service;
 import com.iscourse.api.domain.course.Course;
 import com.iscourse.api.domain.course.CoursePlace;
 import com.iscourse.api.domain.course.Place;
-import com.iscourse.api.controller.CourseShareDto;
+import com.iscourse.api.controller.AddCourseDto;
 import com.iscourse.api.domain.member.Member;
 import com.iscourse.api.domain.member.MemberCourse;
 import com.iscourse.api.domain.member.MemberCourseLike;
@@ -70,17 +70,43 @@ public class CourseService {
     }
 
     @Transactional
-    public void share(CourseShareDto courseShareDto) {
+    public void share(AddCourseDto addCourseDto) {
         Course course = new Course(
-                courseShareDto.getName(),
-                courseShareDto.getHour(),
-                courseShareDto.getMinute(),
-                courseShareDto.getIntroduce(),
+                addCourseDto.getName(),
+                addCourseDto.getHour(),
+                addCourseDto.getMinute(),
+                addCourseDto.getIntroduce(),
                 MemberRoleType.ROLE_USER
         );
         courseRepository.save(course);
-        for (int i = 0; i < courseShareDto.getPlaceIdList().size(); i++) {
-            Place place = placeRepository.findById(courseShareDto.getPlaceIdList().get(i)).orElseThrow(IllegalArgumentException::new);
+        for (int i = 0; i < addCourseDto.getPlaceIdList().size(); i++) {
+            Place place = placeRepository.findById(addCourseDto.getPlaceIdList().get(i)).orElseThrow(IllegalArgumentException::new);
+
+            if (!place.getEnabled()) {
+                throw new UnavailableEntityException("비활성화된 장소입니다.");
+            }
+
+            CoursePlace coursePlace = new CoursePlace(
+                    course,
+                    place,
+                    i
+            );
+            coursePlaceRepository.save(coursePlace);
+        }
+    }
+
+    @Transactional
+    public void addCourse(AddCourseDto addCourseDto) {
+        Course course = new Course(
+                addCourseDto.getName(),
+                addCourseDto.getHour(),
+                addCourseDto.getMinute(),
+                addCourseDto.getIntroduce(),
+                MemberRoleType.ROLE_MANAGER
+        );
+        courseRepository.save(course);
+        for (int i = 0; i < addCourseDto.getPlaceIdList().size(); i++) {
+            Place place = placeRepository.findById(addCourseDto.getPlaceIdList().get(i)).orElseThrow(IllegalArgumentException::new);
 
             if (!place.getEnabled()) {
                 throw new UnavailableEntityException("비활성화된 장소입니다.");

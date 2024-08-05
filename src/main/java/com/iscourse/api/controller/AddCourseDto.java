@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class CourseShareDto {
+public class AddCourseDto {
     private String name;
     private Integer hour;
     private Integer minute;

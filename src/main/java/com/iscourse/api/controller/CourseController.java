@@ -46,8 +46,8 @@ public class CourseController {
     }
 
     @PostMapping("share-course")
-    public void share(@RequestBody CourseShareDto courseShareDto) {
-        courseService.share(courseShareDto);
+    public void share(@RequestBody AddCourseDto addCourseDto) {
+        courseService.share(addCourseDto);
     }
 
     @GetMapping("recommend-course")
@@ -68,6 +68,11 @@ public class CourseController {
     @GetMapping("user/shared-course")
     public Page<CourseFrontListDto> getMemberSharedList(@AuthenticationPrincipal MemberLoginDto memberLoginDto, Pageable pageable) {
         return courseQueryRepository.getMemberSharedList(memberLoginDto.getId(), pageable);
+    }
+
+    @PostMapping("manager/course")
+    public void addCourse(@RequestBody AddCourseDto addCourseDto) {
+        courseService.addCourse(addCourseDto);
     }
 
 }

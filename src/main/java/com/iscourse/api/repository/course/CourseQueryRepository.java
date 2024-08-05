@@ -133,7 +133,7 @@ public class CourseQueryRepository {
                                 .limit(1)
                 ))
                 .from(course)
-                .where(course.enabled.eq(true), distance.loe(maxDistance))
+                .where(course.courseType.eq(MemberRoleType.ROLE_MANAGER), course.enabled.eq(true), distance.loe(maxDistance))
                 .offset(0)
                 .limit(10);
 
