@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +38,7 @@ public class DealService {
     }
 
     @Transactional
-    public void add(MultipartFile file, AddDealDto addDealDto) throws IOException {
+    public void add(List<MultipartFile> files, AddDealDto addDealDto) throws IOException {
         Deal deal = new Deal(
                 addDealDto.getStation(),
                 addDealDto.getName(),
@@ -55,6 +56,8 @@ public class DealService {
                 addDealDto.isParking()
         );
         dealRepository.save(deal);
-        uploadFileService.save(file, RelatedType.DEAL, deal.getId());
+        for (MultipartFile file : files) {
+            uploadFileService.save(file, RelatedType.DEAL, deal.getId());
+        }
     }
 }

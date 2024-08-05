@@ -48,8 +48,8 @@ public class DealController {
     }
 
     @PostMapping("manager/deal")
-    public void add(@RequestPart("file")MultipartFile file, @RequestPart("data") AddDealDto addDealDto) throws IOException {
-        dealService.add(file, addDealDto);
+    public void add(@RequestPart("files") List<MultipartFile> files, @RequestPart("data") AddDealDto addDealDto) throws IOException {
+        dealService.add(files, addDealDto);
     }
 
 }
