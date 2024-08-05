@@ -29,8 +29,8 @@ public class MemberService {
         Member member = new Member(sIgnUpMemberDto.getUsername(), passwordEncoder.encode(sIgnUpMemberDto.getPassword()), sIgnUpMemberDto.getGender(), sIgnUpMemberDto.getNickname());
         member.addRole(MemberRole.create(MemberRoleType.ROLE_USER));
         memberRepository.save(member);
-        for (Long interest : sIgnUpMemberDto.getInterests()) {
-            Tag tag = tagRepository.findById(interest).orElseThrow(IllegalArgumentException::new);
+        for (String interest : sIgnUpMemberDto.getInterests()) {
+            Tag tag = tagRepository.findByCode(interest).orElseThrow(IllegalArgumentException::new);
             MemberInterest memberInterest = new MemberInterest(member, tag);
             memberInterestRepository.save(memberInterest);
         }

@@ -16,5 +16,5 @@ public class SignUpMemberDto {
     private String password;
     private GenderType gender;
     private String nickname;
-    private List<Long> interests = new ArrayList<>();
+    private List<String> interests = new ArrayList<>();
 }
