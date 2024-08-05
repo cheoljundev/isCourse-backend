@@ -142,4 +142,35 @@ public class CourseQueryRepository {
         int total = contents.size();
         return PageableExecutionUtils.getPage(contents, Pageable.unpaged(), () -> total);
     }
+
+    public CourseAdminDto adminDetail(Long id) {
+        CourseAdminDto courseAdminDto = queryFactory
+                .select(new QCourseAdminDto(course))
+                .from(course)
+                .where(course.id.eq(id), course.enabled.eq(true))
+                .fetchOne();
+
+        List<Tag> tags = queryFactory
+                .select(courseTag.tag)
+                .from(courseTag)
+                .where(courseTag.course.id.eq(id), courseTag.enabled.eq(true))
+                .fetch();
+
+        List<CoursePlaceDto> coursePlaceList = queryFactory
+                .select(new QCoursePlaceDto(
+                        coursePlace.place.state.name,
+                        coursePlace.place.name,
+                        coursePlace.place.image,
+                        coursePlace.position
+                ))
+                .from(coursePlace)
+                .where(coursePlace.course.id.eq(id), coursePlace.enabled.eq(true))
+                .fetch();
+
+        tags.forEach(tag -> courseAdminDto.getTags().add(tag.getName()));
+        coursePlaceList.forEach(coursePlace -> courseAdminDto.getCoursePlaces().add(coursePlace));
+
+        return courseAdminDto;
+    }
+
 }

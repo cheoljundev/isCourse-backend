@@ -1,6 +1,7 @@
 package com.iscourse.api.controller;
 
 import com.iscourse.api.controller.dto.course.RecommendCourseConditionDto;
+import com.iscourse.api.domain.course.dto.CourseAdminDto;
 import com.iscourse.api.domain.course.dto.CourseFrontDto;
 import com.iscourse.api.domain.course.dto.CourseFrontListDto;
 import com.iscourse.api.domain.member.MemberPlace;
@@ -68,6 +69,11 @@ public class CourseController {
     @GetMapping("user/shared-course")
     public Page<CourseFrontListDto> getMemberSharedList(@AuthenticationPrincipal MemberLoginDto memberLoginDto, Pageable pageable) {
         return courseQueryRepository.getMemberSharedList(memberLoginDto.getId(), pageable);
+    }
+
+    @GetMapping("manager/course/{id}")
+    public CourseAdminDto adminDetail(@PathVariable("id") Long id) {
+        return courseQueryRepository.adminDetail(id);
     }
 
     @PostMapping("manager/course")
