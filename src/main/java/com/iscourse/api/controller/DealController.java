@@ -5,8 +5,10 @@ import com.iscourse.api.controller.dto.deal.DealAdminConditionDto;
 import com.iscourse.api.domain.deal.dto.DealAdminListDto;
 import com.iscourse.api.domain.deal.dto.DealDto;
 import com.iscourse.api.domain.deal.dto.DealListDto;
+import com.iscourse.api.domain.deal.dto.SalesDetailDto;
 import com.iscourse.api.domain.member.dto.MemberLoginDto;
 import com.iscourse.api.repository.deal.DealQueryRepository;
+import com.iscourse.api.repository.deal.SalesDetailQueryRepository;
 import com.iscourse.api.service.DealService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,6 +26,7 @@ import java.util.List;
 public class DealController {
     private final DealQueryRepository dealQueryRepository;
     private final DealService dealService;
+    private final SalesDetailQueryRepository salesDetailQueryRepository;
 
     @GetMapping("deal")
     public List<DealListDto> frontList() {
@@ -61,5 +64,11 @@ public class DealController {
     public void delete(@PathVariable("id") Long id) {
         dealService.delete(id);
     }
+
+    @GetMapping("manager/sales/deal")
+    public Page<SalesDetailDto> salesList(Pageable pageable) {
+        return salesDetailQueryRepository.findList(pageable);
+    }
+
 
 }

@@ -4,9 +4,10 @@ import com.iscourse.api.domain.BaseEntity;
 import com.iscourse.api.domain.member.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
+@Entity @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SalesDetail extends BaseEntity {
     @Id @GeneratedValue

@@ -6,7 +6,7 @@ import com.iscourse.api.domain.member.Member;
 import com.iscourse.api.domain.member.MemberInterest;
 import com.iscourse.api.domain.member.MemberRole;
 import com.iscourse.api.domain.member.MemberRoleType;
-import com.iscourse.api.dto.member.SignUpMemberDto;
+import com.iscourse.api.domain.member.dto.SignUpMemberDto;
 import com.iscourse.api.repository.TagRepository;
 import com.iscourse.api.repository.member.MemberInterestRepository;
 import com.iscourse.api.repository.member.MemberRepository;

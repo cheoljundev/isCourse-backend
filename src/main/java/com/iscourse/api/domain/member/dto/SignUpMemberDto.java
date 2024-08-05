@@ -1,4 +1,4 @@
-package com.iscourse.api.dto.member;
+package com.iscourse.api.domain.member.dto;
 
 import com.iscourse.api.domain.member.GenderType;
 import lombok.AllArgsConstructor;

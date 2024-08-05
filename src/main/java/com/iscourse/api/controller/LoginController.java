@@ -2,7 +2,7 @@ package com.iscourse.api.controller;
 
 import com.iscourse.api.domain.dto.TagDto;
 import com.iscourse.api.controller.dto.login.LoginRequest;
-import com.iscourse.api.dto.member.SignUpMemberDto;
+import com.iscourse.api.domain.member.dto.SignUpMemberDto;
 import com.iscourse.api.security.jwt.JwtUtil;
 import com.iscourse.api.security.token.RestAuthenticationToken;
 import com.iscourse.api.service.MemberService;
