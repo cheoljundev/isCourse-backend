@@ -88,4 +88,11 @@ public class DealService {
             uploadFileService.save(file, RelatedType.DEAL, deal.getId());
         }
     }
+
+    @Transactional
+    public void delete(Long id) {
+        Deal deal = dealRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        uploadFileRepository.findByRelatedId(deal.getId()).forEach(UploadFile::delete);
+        deal.delete();
+    }
 }

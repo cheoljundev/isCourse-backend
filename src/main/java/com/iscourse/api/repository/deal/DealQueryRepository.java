@@ -6,6 +6,7 @@ import com.iscourse.api.domain.dto.QUploadFileDto;
 import com.iscourse.api.domain.dto.UploadFileDto;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -26,40 +27,26 @@ public class DealQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     public List<DealListDto> findList() {
-        JPQLQuery<String> originalFileNameSubquery = JPAExpressions
-                .select(uploadFile.originalFileName)
-                .from(uploadFile)
-                .where(uploadFile.relatedType.eq(RelatedType.DEAL)
-                        .and(uploadFile.relatedId.eq(deal.id)))
-                .limit(1);
 
-        JPQLQuery<String> storedFileNameSubquery = JPAExpressions
-                .select(uploadFile.storedFileName)
-                .from(uploadFile)
-                .where(uploadFile.relatedType.eq(RelatedType.DEAL)
-                        .and(uploadFile.relatedId.eq(deal.id)))
-                .limit(1);
-
-        JPQLQuery<String> fileTypeSubquery = JPAExpressions
-                .select(uploadFile.fileType)
-                .from(uploadFile)
-                .where(uploadFile.relatedType.eq(RelatedType.DEAL)
-                        .and(uploadFile.relatedId.eq(deal.id)))
-                .limit(1);
-
-        List<DealListDto> deals = queryFactory
+        JPAQuery<DealListDto> query = queryFactory
                 .select(new QDealListDto(
                         deal,
                         new QUploadFileDto(
-                                originalFileNameSubquery,
-                                storedFileNameSubquery,
-                                fileTypeSubquery)
+                                uploadFile.originalFileName,
+                                uploadFile.storedFileName,
+                                uploadFile.fileType
+                        )
                 ))
                 .from(deal)
-                .where(deal.enabled.eq(true))
-                .fetch();
+                .leftJoin(uploadFile)
+                .on(
+                        uploadFile.relatedType.eq(RelatedType.DEAL),
+                        uploadFile.relatedId.eq(deal.id)
+                )
+                .where(deal.enabled.eq(true));
 
-        return deals;
+        return query.fetch();
+
     }
 
     public DealDto findOne(Long id) {

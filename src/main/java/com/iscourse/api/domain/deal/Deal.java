@@ -64,4 +64,8 @@ public class Deal extends BaseEntity {
         this.mapy = mapy;
         this.parking = parking;
     }
+
+    public void delete() {
+        this.enabled = false;
+    }
 }

@@ -57,4 +57,9 @@ public class DealController {
         dealService.update(id, files, addDealDto);
     }
 
+    @DeleteMapping("manager/deal/{id}")
+    public void delete(@PathVariable("id") Long id) {
+        dealService.delete(id);
+    }
+
 }
