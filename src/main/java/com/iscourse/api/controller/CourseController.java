@@ -89,4 +89,10 @@ public class CourseController {
         courseService.addCourse(addCourseDto);
     }
 
+    @PatchMapping("manager/course/{id}")
+    public void updateCourse(@PathVariable("id") Long id, @RequestBody AddCourseDto addCourseDto) {
+        courseService.updateCourse(id, addCourseDto);
+    }
+
+
 }

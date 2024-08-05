@@ -35,4 +35,8 @@ public class CoursePlace extends BaseEntity {
         this.position = position;
         course.setAxis(place.getMapx(), place.getMapy());
     }
+
+    public void delete() {
+        this.enabled = false;
+    }
 }

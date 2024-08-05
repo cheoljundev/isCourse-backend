@@ -26,4 +26,8 @@ public class CourseTag extends BaseEntity {
         this.course = course;
         this.tag = tag;
     }
+
+    public void delete() {
+        this.enabled = false;
+    }
 }

@@ -61,4 +61,13 @@ public class Course extends BaseEntity {
         this.likes++;
     }
 
+    public void update(String name, Integer hour, Integer minute, String introduce) {
+        this.name = name;
+        this.hour = hour;
+        this.minute = minute;
+        this.introduce = introduce;
+        this.mapx = null;
+        this.mapy = null;
+    }
+
 }

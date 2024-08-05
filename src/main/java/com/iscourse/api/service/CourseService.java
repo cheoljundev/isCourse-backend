@@ -142,4 +142,42 @@ public class CourseService {
             courseTagRepository.save(courseTag);
         }
     }
+
+    @Transactional
+    public void updateCourse(Long id, AddCourseDto addCourseDto) {
+        Course course = courseRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        course.update(
+                addCourseDto.getName(),
+                addCourseDto.getHour(),
+                addCourseDto.getMinute(),
+                addCourseDto.getIntroduce()
+        );
+        courseRepository.save(course);
+
+        coursePlaceRepository.findByCourse(course).forEach(CoursePlace::delete);
+        courseTagRepository.findByCourse(course).forEach(CourseTag::delete);
+
+        for (int i = 0; i < addCourseDto.getPlaceIdList().size(); i++) {
+            Place place = placeRepository.findById(addCourseDto.getPlaceIdList().get(i)).orElseThrow(IllegalArgumentException::new);
+
+            if (!place.getEnabled()) {
+                throw new UnavailableEntityException("비활성화된 장소입니다.");
+            }
+
+            addCourseDto.getTagList().add(place.getTag().getCode());
+
+            CoursePlace coursePlace = new CoursePlace(
+                    course,
+                    place,
+                    i
+            );
+            coursePlaceRepository.save(coursePlace);
+        }
+
+        for (String code : addCourseDto.getTagList()) {
+            Tag tag = tagRepository.findByCode(code).orElseThrow(IllegalArgumentException::new);
+            CourseTag courseTag = new CourseTag(course, tag);
+            courseTagRepository.save(courseTag);
+        }
+    }
 }
