@@ -11,7 +11,6 @@ import java.util.List;
 public class CourseAdminDto {
 
     private String name;
-    private String time;
     private Integer hours;
     private Integer minutes;
     private String introduce;

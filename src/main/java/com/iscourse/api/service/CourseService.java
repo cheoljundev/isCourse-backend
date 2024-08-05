@@ -1,7 +1,9 @@
 package com.iscourse.api.service;
 
+import com.iscourse.api.domain.Tag;
 import com.iscourse.api.domain.course.Course;
 import com.iscourse.api.domain.course.CoursePlace;
+import com.iscourse.api.domain.course.CourseTag;
 import com.iscourse.api.domain.course.Place;
 import com.iscourse.api.controller.AddCourseDto;
 import com.iscourse.api.domain.member.Member;
@@ -10,8 +12,10 @@ import com.iscourse.api.domain.member.MemberCourseLike;
 import com.iscourse.api.domain.member.MemberRoleType;
 import com.iscourse.api.exception.DuplicateCourseException;
 import com.iscourse.api.exception.UnavailableEntityException;
+import com.iscourse.api.repository.TagRepository;
 import com.iscourse.api.repository.course.CoursePlaceRepository;
 import com.iscourse.api.repository.course.CourseRepository;
+import com.iscourse.api.repository.course.CourseTagRepository;
 import com.iscourse.api.repository.course.PlaceRepository;
 import com.iscourse.api.repository.member.MemberCourseLikeRepository;
 import com.iscourse.api.repository.member.MemberCourseRepository;
@@ -32,6 +36,8 @@ public class CourseService {
     private final MemberCourseRepository memberCourseRepository;
     private final PlaceRepository placeRepository;
     private final CoursePlaceRepository coursePlaceRepository;
+    private final CourseTagRepository courseTagRepository;
+    private final TagRepository tagRepository;
 
     @Transactional
     public void like(Long courseId, Long memberId) {
@@ -86,12 +92,20 @@ public class CourseService {
                 throw new UnavailableEntityException("비활성화된 장소입니다.");
             }
 
+            addCourseDto.getTagList().add(place.getTag().getCode());
+
             CoursePlace coursePlace = new CoursePlace(
                     course,
                     place,
                     i
             );
             coursePlaceRepository.save(coursePlace);
+        }
+
+        for (String code : addCourseDto.getTagList()) {
+            Tag tag = tagRepository.findByCode(code).orElseThrow(IllegalArgumentException::new);
+            CourseTag courseTag = new CourseTag(course, tag);
+            courseTagRepository.save(courseTag);
         }
     }
 
@@ -112,12 +126,20 @@ public class CourseService {
                 throw new UnavailableEntityException("비활성화된 장소입니다.");
             }
 
+            addCourseDto.getTagList().add(place.getTag().getCode());
+
             CoursePlace coursePlace = new CoursePlace(
                     course,
                     place,
                     i
             );
             coursePlaceRepository.save(coursePlace);
+        }
+
+        for (String code : addCourseDto.getTagList()) {
+            Tag tag = tagRepository.findByCode(code).orElseThrow(IllegalArgumentException::new);
+            CourseTag courseTag = new CourseTag(course, tag);
+            courseTagRepository.save(courseTag);
         }
     }
 }
