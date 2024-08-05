@@ -1,14 +1,19 @@
 package com.iscourse.api.repository.course;
 
+import com.iscourse.api.controller.dto.course.CourseSearchConditionDto;
 import com.iscourse.api.domain.Tag;
 import com.iscourse.api.domain.course.dto.*;
 import com.iscourse.api.domain.member.MemberRoleType;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -22,6 +27,7 @@ import static com.iscourse.api.domain.course.QCourseTag.courseTag;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class CourseQueryRepository {
     private final JPAQueryFactory queryFactory;
 
@@ -171,6 +177,55 @@ public class CourseQueryRepository {
         coursePlaceList.forEach(coursePlace -> courseAdminDto.getCoursePlaces().add(coursePlace));
 
         return courseAdminDto;
+    }
+
+    public Page<CourseAdminListDto> adminList(CourseSearchConditionDto condition, Pageable pageable) {
+        JPQLQuery<Long> courseIdsByTags = condition.getTagList().isEmpty() ? null : JPAExpressions
+                .select(courseTag.course.id)
+                .from(courseTag)
+                .where(courseTag.tag.code.in(condition.getTagList()));
+
+        JPAQuery<CourseAdminListDto> query = queryFactory
+                .select(new QCourseAdminListDto(
+                        course,
+                        JPAExpressions
+                                .select(coursePlace.place.state.name)
+                                .from(coursePlace)
+                                .where(coursePlace.course.id.eq(course.id))
+                                .limit(1),
+                        JPAExpressions
+                                .select(coursePlace.place.image)
+                                .from(coursePlace)
+                                .where(coursePlace.course.id.eq(course.id))
+                                .limit(1)
+                ))
+                .from(course)
+                .where(
+                        course.enabled.eq(true),
+                        courseTagIn(courseIdsByTags),
+                        courseNameLike(condition.getName()),
+                        courseTypeEq(condition.getCourseType())
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize());
+
+        List<CourseAdminListDto> contents = query.fetch();
+
+        int total = contents.size();
+        return PageableExecutionUtils.getPage(contents, pageable, () -> total);
+
+    }
+
+    private BooleanExpression courseTagIn(JPQLQuery<Long> courseIdsByTags) {
+        return courseIdsByTags == null ? null : course.id.in(courseIdsByTags);
+    }
+
+    private BooleanExpression courseTypeEq(MemberRoleType courseType) {
+        return courseType == null ? null : course.courseType.eq(courseType);
+    }
+
+    private BooleanExpression courseNameLike(String name) {
+        return name == null ? null : course.name.contains(name);
     }
 
 }

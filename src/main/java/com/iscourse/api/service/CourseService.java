@@ -5,7 +5,7 @@ import com.iscourse.api.domain.course.Course;
 import com.iscourse.api.domain.course.CoursePlace;
 import com.iscourse.api.domain.course.CourseTag;
 import com.iscourse.api.domain.course.Place;
-import com.iscourse.api.controller.AddCourseDto;
+import com.iscourse.api.controller.dto.course.AddCourseDto;
 import com.iscourse.api.domain.member.Member;
 import com.iscourse.api.domain.member.MemberCourse;
 import com.iscourse.api.domain.member.MemberCourseLike;
