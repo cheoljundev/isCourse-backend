@@ -2,11 +2,12 @@ package com.iscourse.api.controller;
 
 import com.iscourse.api.controller.dto.course.AddCourseDto;
 import com.iscourse.api.controller.dto.course.CourseSearchConditionDto;
+import com.iscourse.api.controller.dto.course.PlaceSearchConditionDto;
 import com.iscourse.api.controller.dto.course.RecommendCourseConditionDto;
 import com.iscourse.api.domain.course.dto.*;
-import com.iscourse.api.domain.member.MemberPlace;
 import com.iscourse.api.domain.member.dto.MemberLoginDto;
 import com.iscourse.api.repository.course.CourseQueryRepository;
+import com.iscourse.api.repository.course.PlaceQueryRepository;
 import com.iscourse.api.repository.member.MemberCourseQueryRepository;
 import com.iscourse.api.repository.member.MemberPlaceQueryRepository;
 import com.iscourse.api.service.CourseService;
@@ -25,6 +26,7 @@ public class CourseController {
     private final CourseService courseService;
     private final MemberCourseQueryRepository memberCourseQueryRepository;
     private final MemberPlaceQueryRepository memberPlaceQueryRepository;
+    private final PlaceQueryRepository placeQueryRepository;
 
     @GetMapping("course")
     public Page<CourseFrontListDto> frontList(Pageable pageable) {
@@ -96,6 +98,9 @@ public class CourseController {
         courseService.deleteCourse(id);
     }
 
-
+    @GetMapping("manager/place")
+    public Page<PlaceListDto> adminPlaceList(@RequestBody PlaceSearchConditionDto condition, Pageable pageable) {
+        return placeQueryRepository.adminList(condition, pageable);
+    }
 
 }
