@@ -1,6 +1,7 @@
 package com.iscourse.api.repository.course;
 
 import com.iscourse.api.controller.dto.course.PlaceSearchConditionDto;
+import com.iscourse.api.domain.course.QState;
 import com.iscourse.api.domain.course.dto.*;
 import com.iscourse.api.domain.dto.QTagDto;
 import com.iscourse.api.domain.dto.TagDto;
@@ -20,6 +21,7 @@ import static com.iscourse.api.domain.course.QLargeCategory.largeCategory;
 import static com.iscourse.api.domain.course.QMiddleCategory.middleCategory;
 import static com.iscourse.api.domain.course.QPlace.place;
 import static com.iscourse.api.domain.course.QPlaceType.placeType;
+import static com.iscourse.api.domain.course.QState.state;
 
 @Repository
 @RequiredArgsConstructor
@@ -96,6 +98,16 @@ public class PlaceQueryRepository {
                 .fetch();
     }
 
+    public List<StateDto> getState() {
+        return queryFactory
+                .select(new QStateDto(
+                        state.code,
+                        state.name
+                ))
+                .from(state)
+                .fetch();
+    }
+
     private BooleanExpression placeTypeEq(String placeTypeCode) {
         return placeTypeCode != null ? place.placeType.code.eq(placeTypeCode) : null;
     }
@@ -123,6 +135,5 @@ public class PlaceQueryRepository {
     private BooleanExpression nameLike(String name) {
         return name != null ? place.name.contains(name) : null;
     }
-
 
 }

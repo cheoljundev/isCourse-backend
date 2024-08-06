@@ -137,5 +137,10 @@ public class CourseController {
         return placeQueryRepository.getTags(parentId);
     }
 
+    @GetMapping("manager/state")
+    public List<StateDto> getState() {
+        return placeQueryRepository.getState();
+    }
+
 
 }
