@@ -1,5 +1,7 @@
 package com.iscourse.api.repository.member;
 
+import com.iscourse.api.domain.course.dto.PlaceListDto;
+import com.iscourse.api.domain.course.dto.QPlaceListDto;
 import com.iscourse.api.domain.member.MemberCourse;
 import com.iscourse.api.domain.member.MemberPlace;
 import com.iscourse.api.domain.member.QMemberPlace;
@@ -22,13 +24,14 @@ public class MemberPlaceQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public Page<MemberPlace> getMemberPlaceList(Pageable pageable) {
-        JPAQuery<MemberPlace> query = queryFactory
-                .selectFrom(memberPlace)
+    public Page<PlaceListDto> getMemberPlaceList(Pageable pageable) {
+        JPAQuery<PlaceListDto> query = queryFactory
+                .select(new QPlaceListDto(memberPlace))
+                .from(memberPlace)
                 .where(memberPlace.enabled.eq(true))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
-        List<MemberPlace> contents = query.fetch();
+        List<PlaceListDto> contents = query.fetch();
         int total = contents.size();
         return PageableExecutionUtils.getPage(contents, pageable, () -> total);
     }

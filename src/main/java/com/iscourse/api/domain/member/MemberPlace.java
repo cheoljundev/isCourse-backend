@@ -3,8 +3,9 @@ package com.iscourse.api.domain.member;
 import com.iscourse.api.domain.BaseEntity;
 import com.iscourse.api.domain.course.Place;
 import jakarta.persistence.*;
+import lombok.Getter;
 
-@Entity
+@Entity @Getter
 public class MemberPlace extends BaseEntity {
     @Id @GeneratedValue
     @Column(name = "member_place_id")
