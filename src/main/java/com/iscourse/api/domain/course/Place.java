@@ -64,4 +64,8 @@ public class Place extends BaseEntity {
         this.tel = tel;
         this.image = image;
     }
+
+    public void delete() {
+        this.enabled = false;
+    }
 }

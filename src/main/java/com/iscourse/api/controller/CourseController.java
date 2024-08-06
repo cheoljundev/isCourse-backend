@@ -11,6 +11,7 @@ import com.iscourse.api.repository.course.PlaceQueryRepository;
 import com.iscourse.api.repository.member.MemberCourseQueryRepository;
 import com.iscourse.api.repository.member.MemberPlaceQueryRepository;
 import com.iscourse.api.service.CourseService;
+import com.iscourse.api.service.PlaceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,7 @@ public class CourseController {
     private final MemberCourseQueryRepository memberCourseQueryRepository;
     private final MemberPlaceQueryRepository memberPlaceQueryRepository;
     private final PlaceQueryRepository placeQueryRepository;
+    private final PlaceService placeService;
 
     @GetMapping("course")
     public Page<CourseFrontListDto> frontList(Pageable pageable) {
@@ -102,5 +104,11 @@ public class CourseController {
     public Page<PlaceListDto> adminPlaceList(@RequestBody PlaceSearchConditionDto condition, Pageable pageable) {
         return placeQueryRepository.adminList(condition, pageable);
     }
+
+    @DeleteMapping("manager/place/{id}")
+    public void deletePlace(@PathVariable("id") Long id) {
+        placeService.deletePlace(id);
+    }
+
 
 }
