@@ -1,10 +1,7 @@
 package com.iscourse.api.repository.member;
 
 import com.iscourse.api.controller.dto.member.MemberSearchCondition;
-import com.iscourse.api.domain.member.GenderType;
-import com.iscourse.api.domain.member.MemberRole;
-import com.iscourse.api.domain.member.QMember;
-import com.iscourse.api.domain.member.QMemberRole;
+import com.iscourse.api.domain.member.*;
 import com.iscourse.api.domain.member.dto.MemberAdminDetailDto;
 import com.iscourse.api.domain.member.dto.MemberListDto;
 import com.iscourse.api.domain.member.dto.QMemberAdminDetailDto;
