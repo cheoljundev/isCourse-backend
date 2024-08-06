@@ -142,5 +142,10 @@ public class CourseController {
         return placeQueryRepository.getState();
     }
 
+    @GetMapping("manager/city")
+    public List<CityDto> getCity(@RequestParam("parent") Long parentId) {
+        return placeQueryRepository.getCity(parentId);
+    }
+
 
 }

@@ -1,6 +1,7 @@
 package com.iscourse.api.repository.course;
 
 import com.iscourse.api.controller.dto.course.PlaceSearchConditionDto;
+import com.iscourse.api.domain.course.QCity;
 import com.iscourse.api.domain.course.QState;
 import com.iscourse.api.domain.course.dto.*;
 import com.iscourse.api.domain.dto.QTagDto;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.iscourse.api.domain.QTag.tag;
+import static com.iscourse.api.domain.course.QCity.city;
 import static com.iscourse.api.domain.course.QLargeCategory.largeCategory;
 import static com.iscourse.api.domain.course.QMiddleCategory.middleCategory;
 import static com.iscourse.api.domain.course.QPlace.place;
@@ -136,4 +138,14 @@ public class PlaceQueryRepository {
         return name != null ? place.name.contains(name) : null;
     }
 
+    public List<CityDto> getCity(Long parentId) {
+        return queryFactory
+                .select(new QCityDto(
+                        city.code,
+                        city.name
+                ))
+                .from(city)
+                .where(city.parent.id.eq(parentId))
+                .fetch();
+    }
 }
