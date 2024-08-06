@@ -10,12 +10,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
+import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriUtils;
 
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,24 +47,30 @@ public class PlaceService {
 
         String url = "http://apis.data.go.kr/B551011/KorService1/areaBasedList1";
 
+
         // 서비스 키: URL 인코딩되지 않은 값
         String serviceKey = "0PgiN9t3WrHpyoD/zJvKmTRjB3mbJ7WEJ/we0+YI/gi4mKYmYAXexISY9Zq9BiEr8nbk+2v6dHZw8KZtYeBaRA==";
+        String encodedServiceKey = UriUtils.encode(serviceKey, StandardCharsets.UTF_8);
 
         // 쿼리 파라미터를 수동으로 추가하여 URL 생성
-        String uri = url + "?MobileOS=ETC" +
-                "&MobileApp=isCourse" +
-                "&listYN=Y" +
-                "&arrange=A" +
-                "&numOfRows=" + pageable.getPageSize() +
-                "&ServiceKey=" + UriUtils.encode(serviceKey, StandardCharsets.UTF_8) +
-                "&contentTypeId=" + (condition.getPlaceTypeCode() == null ? "" : UriUtils.encode(condition.getPlaceTypeCode(), StandardCharsets.UTF_8)) +
-                "&areaCode=" + (condition.getStateCode() == null ? "" : UriUtils.encode(condition.getStateCode(), StandardCharsets.UTF_8)) +
-                "&sigunguCode=" + (condition.getCityCode() == null ? "" : UriUtils.encode(condition.getCityCode(), StandardCharsets.UTF_8)) +
-                "&cat1=" + (condition.getLargeCategoryCode() == null ? "" : UriUtils.encode(condition.getLargeCategoryCode(), StandardCharsets.UTF_8)) +
-                "&cat2=" + (condition.getMiddleCategoryCode() == null ? "" : UriUtils.encode(condition.getMiddleCategoryCode(), StandardCharsets.UTF_8)) +
-                "&cat3=" + (condition.getTagCode() == null ? "" : UriUtils.encode(condition.getTagCode(), StandardCharsets.UTF_8)) +
-                "&pageNo=" + pageable.getPageNumber() +
-                "&_type=json";
+        StringBuilder queryString = new StringBuilder("?MobileOS=ETC");
+        queryString.append("&MobileApp=isCourse");
+        queryString.append("&listYN=Y");
+        queryString.append("&arrange=A");
+        queryString.append("&numOfRows=").append(pageable.getPageSize());
+        queryString.append("&ServiceKey=").append(encodedServiceKey);
+        queryString.append("&contentTypeId=").append(condition.getPlaceTypeCode() == null ? "" : condition.getPlaceTypeCode());
+        queryString.append("&areaCode=").append(condition.getStateCode() == null ? "" : condition.getStateCode());
+        queryString.append("&sigunguCode=").append(condition.getCityCode() == null ? "" : condition.getCityCode());
+        queryString.append("&cat1=").append(condition.getLargeCategoryCode() == null ? "" : condition.getLargeCategoryCode());
+        queryString.append("&cat2=").append(condition.getMiddleCategoryCode() == null ? "" : condition.getMiddleCategoryCode());
+        queryString.append("&cat3=").append(condition.getTagCode() == null ? "" : condition.getTagCode());
+        queryString.append("&pageNo=").append(pageable.getPageNumber());
+        queryString.append("&_type=json");
+
+        String uri = url + queryString.toString();
+
+        log.info("uri: {}", uri);
 
         ApiResponse.Body body = webClient.get()
                 .uri(uri)
