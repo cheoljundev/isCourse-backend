@@ -1,11 +1,9 @@
 package com.iscourse.api.repository.course;
 
 import com.iscourse.api.controller.dto.course.PlaceSearchConditionDto;
+import com.iscourse.api.domain.course.QLargeCategory;
 import com.iscourse.api.domain.course.QPlaceType;
-import com.iscourse.api.domain.course.dto.PlaceListDto;
-import com.iscourse.api.domain.course.dto.PlaceTypeDto;
-import com.iscourse.api.domain.course.dto.QPlaceListDto;
-import com.iscourse.api.domain.course.dto.QPlaceTypeDto;
+import com.iscourse.api.domain.course.dto.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -17,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.iscourse.api.domain.course.QLargeCategory.largeCategory;
 import static com.iscourse.api.domain.course.QPlace.place;
 import static com.iscourse.api.domain.course.QPlaceType.*;
 
@@ -88,5 +87,16 @@ public class PlaceQueryRepository {
 
     private BooleanExpression nameLike(String name) {
         return name != null ? place.name.contains(name) : null;
+    }
+
+    public List<LargeCategoryDto> getLargeCategory(Long parentId) {
+        return queryFactory
+                .select(new QLargeCategoryDto(
+                        largeCategory.code,
+                        largeCategory.name
+                ))
+                .from(largeCategory)
+                .where(largeCategory.parent.id.eq(parentId))
+                .fetch();
     }
 }

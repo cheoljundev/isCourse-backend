@@ -124,5 +124,10 @@ public class CourseController {
         return placeQueryRepository.getPlaceTypes();
     }
 
+    @GetMapping("manager/large-category")
+    public List<LargeCategoryDto> getLargeCategory(@RequestParam("parent") Long parentId) {
+        return placeQueryRepository.getLargeCategory(parentId);
+    }
+
 
 }
