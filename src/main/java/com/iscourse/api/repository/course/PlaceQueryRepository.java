@@ -2,6 +2,7 @@ package com.iscourse.api.repository.course;
 
 import com.iscourse.api.controller.dto.course.PlaceSearchConditionDto;
 import com.iscourse.api.domain.course.QLargeCategory;
+import com.iscourse.api.domain.course.QMiddleCategory;
 import com.iscourse.api.domain.course.QPlaceType;
 import com.iscourse.api.domain.course.dto.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.iscourse.api.domain.course.QLargeCategory.largeCategory;
+import static com.iscourse.api.domain.course.QMiddleCategory.middleCategory;
 import static com.iscourse.api.domain.course.QPlace.place;
 import static com.iscourse.api.domain.course.QPlaceType.*;
 
@@ -97,6 +99,17 @@ public class PlaceQueryRepository {
                 ))
                 .from(largeCategory)
                 .where(largeCategory.parent.id.eq(parentId))
+                .fetch();
+    }
+
+    public List<MiddleCategoryDto> getMiddleCategory(Long parentId) {
+        return queryFactory
+                .select(new QMiddleCategoryDto(
+                        middleCategory.code,
+                        middleCategory.name
+                ))
+                .from(middleCategory)
+                .where(middleCategory.parent.id.eq(parentId))
                 .fetch();
     }
 }

@@ -1,7 +1,6 @@
 package com.iscourse.api.controller;
 
 import com.iscourse.api.controller.dto.course.*;
-import com.iscourse.api.domain.course.PlaceType;
 import com.iscourse.api.domain.course.dto.*;
 import com.iscourse.api.domain.member.dto.MemberLoginDto;
 import com.iscourse.api.repository.course.CourseQueryRepository;
@@ -16,9 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Mono;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @RestController
@@ -115,7 +112,7 @@ public class CourseController {
     }
 
     @GetMapping("manager/place/search")
-    public Page<PlaceSelectListDto> getPlaceByApi(@ModelAttribute TourApiSearchConditionDto condition, Pageable pageable){
+    public Page<PlaceSelectListDto> getPlaceByApi(@ModelAttribute TourApiSearchConditionDto condition, Pageable pageable) {
         return placeService.getPlaceByApi(condition, pageable);
     }
 
@@ -127,6 +124,11 @@ public class CourseController {
     @GetMapping("manager/large-category")
     public List<LargeCategoryDto> getLargeCategory(@RequestParam("parent") Long parentId) {
         return placeQueryRepository.getLargeCategory(parentId);
+    }
+
+    @GetMapping("manager/middle-category")
+    public List<MiddleCategoryDto> getMiddleCategory(@RequestParam("parent") Long parentId) {
+        return placeQueryRepository.getMiddleCategory(parentId);
     }
 
 
