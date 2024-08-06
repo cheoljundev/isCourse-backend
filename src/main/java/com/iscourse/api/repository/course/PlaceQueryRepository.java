@@ -30,6 +30,7 @@ public class PlaceQueryRepository {
                 ))
                 .from(place)
                 .where(
+                        place.enabled.isTrue(),
                         placeTypeEq(condition.getPlaceTypeCode()),
                         largeCategoryEq(condition.getLargeCategoryCode()),
                         middleCategoryEq(condition.getMiddleCategoryCode()),
