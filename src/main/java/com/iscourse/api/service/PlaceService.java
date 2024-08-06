@@ -5,6 +5,7 @@ import com.iscourse.api.domain.course.Place;
 import com.iscourse.api.domain.course.dto.ApiResponse;
 import com.iscourse.api.domain.course.dto.PlaceSelectListDto;
 import com.iscourse.api.repository.course.PlaceRepository;
+import io.github.cdimascio.dotenv.Dotenv;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -49,7 +50,7 @@ public class PlaceService {
 
 
         // 서비스 키: URL 인코딩되지 않은 값
-        String serviceKey = "0PgiN9t3WrHpyoD/zJvKmTRjB3mbJ7WEJ/we0+YI/gi4mKYmYAXexISY9Zq9BiEr8nbk+2v6dHZw8KZtYeBaRA==";
+        String serviceKey = Dotenv.load().get("SERVICE_KEY");
         String encodedServiceKey = UriUtils.encode(serviceKey, StandardCharsets.UTF_8);
 
         // 쿼리 파라미터를 수동으로 추가하여 URL 생성
@@ -69,8 +70,6 @@ public class PlaceService {
         queryString.append("&_type=json");
 
         String uri = url + queryString.toString();
-
-        log.info("uri: {}", uri);
 
         ApiResponse.Body body = webClient.get()
                 .uri(uri)

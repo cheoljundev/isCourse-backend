@@ -49,3 +49,6 @@ out/
 .AppleDouble
 .LSOverride
 /upload/
+
+### env ###
+.env
