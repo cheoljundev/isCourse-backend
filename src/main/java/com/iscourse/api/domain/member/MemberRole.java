@@ -4,10 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.iscourse.api.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
 @Entity
 @Getter
-public class MemberRole extends BaseEntity {
+public class MemberRole extends BaseEntity implements Comparable<MemberRole> {
 
     @Id @GeneratedValue
     @Column(name = "role_id")
@@ -34,5 +35,10 @@ public class MemberRole extends BaseEntity {
         MemberRole memberRole = new MemberRole();
         memberRole.setRoleType(roleType);
         return memberRole;
+    }
+
+    @Override
+    public int compareTo(@NotNull MemberRole other) {
+        return Integer.compare(this.roleType.getPriority(), other.roleType.getPriority());
     }
 }

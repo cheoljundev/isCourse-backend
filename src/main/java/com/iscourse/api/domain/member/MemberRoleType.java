@@ -1,5 +1,14 @@
 package com.iscourse.api.domain.member;
 
-public enum MemberRoleType {
-    ROLE_USER, ROLE_MANAGER, ROLE_ADMIN
+import lombok.Getter;
+
+@Getter
+public enum MemberRoleType{
+    ROLE_USER(3), ROLE_MANAGER(2), ROLE_ADMIN(1);
+
+    private final int priority;
+
+    MemberRoleType(int priority) {
+        this.priority = priority;
+    }
 }

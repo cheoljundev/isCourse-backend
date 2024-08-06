@@ -2,7 +2,12 @@ package com.iscourse.api.repository.member;
 
 import com.iscourse.api.controller.dto.member.MemberSearchCondition;
 import com.iscourse.api.domain.member.GenderType;
+import com.iscourse.api.domain.member.MemberRole;
+import com.iscourse.api.domain.member.QMember;
+import com.iscourse.api.domain.member.QMemberRole;
+import com.iscourse.api.domain.member.dto.MemberAdminDetailDto;
 import com.iscourse.api.domain.member.dto.MemberListDto;
+import com.iscourse.api.domain.member.dto.QMemberAdminDetailDto;
 import com.iscourse.api.domain.member.dto.QMemberListDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -16,6 +21,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.iscourse.api.domain.member.QMember.member;
+import static com.iscourse.api.domain.member.QMemberRole.memberRole;
 
 @Repository
 @RequiredArgsConstructor
@@ -53,5 +59,34 @@ public class MemberQueryRepository {
 
     private BooleanExpression genderEq(GenderType genderType) {
         return genderType == null ? null : member.gender.eq(genderType);
+    }
+
+    public MemberAdminDetailDto getMember(Long id) {
+
+        List<MemberRole> memberRoles = queryFactory
+                .selectFrom(memberRole)
+                .where(memberRole.member.id.eq(id))
+                .fetch();
+
+        // 가장 높은 role을 선택 (가장 높은 role은 오름차순으로 결정)
+        MemberRole memberRole = memberRoles.stream()
+                .min(MemberRole::compareTo)
+                .orElseThrow(() -> new IllegalArgumentException("해당 회원의 권한이 없습니다."));
+
+
+        MemberAdminDetailDto selectMember = queryFactory
+                .select(new QMemberAdminDetailDto(
+                        member.id,
+                        member.username,
+                        member.nickname,
+                        member.gender
+                ))
+                .from(member)
+                .where(member.id.eq(id))
+                .fetchOne();
+
+        selectMember.setMemberRole(memberRole);
+
+        return selectMember;
     }
 }
