@@ -81,4 +81,9 @@ public class MemberService {
                 break;
         }
     }
+
+    @Transactional
+    public void deleteMember(Long id) {
+        memberRepository.findById(id).ifPresent(Member::delete);
+    }
 }

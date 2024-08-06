@@ -35,5 +35,9 @@ public class MemberController {
     public void updateRole(@PathVariable Long id, @RequestBody UpdateMemberRole updateMemberRole) {
         memberService.updateRole(id, updateMemberRole);
     }
+    @DeleteMapping("admin/member/{id}")
+    public void deleteMember(@PathVariable Long id) {
+        memberService.deleteMember(id);
+    }
 
 }

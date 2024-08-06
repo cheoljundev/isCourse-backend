@@ -37,7 +37,8 @@ public class MemberQueryRepository {
                 .where(
                         usernameEq(condition.getUsername()),
                         nicknameEq(condition.getNickname()),
-                        genderEq(condition.getGenderType())
+                        genderEq(condition.getGenderType()),
+                        member.enabled.isTrue()
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
@@ -79,7 +80,10 @@ public class MemberQueryRepository {
                         member.gender
                 ))
                 .from(member)
-                .where(member.id.eq(id))
+                .where(
+                        member.id.eq(id),
+                        member.enabled.isTrue()
+                )
                 .fetchOne();
 
         selectMember.setMemberRole(memberRole);

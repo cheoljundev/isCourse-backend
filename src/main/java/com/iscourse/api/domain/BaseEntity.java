@@ -1,5 +1,6 @@
 package com.iscourse.api.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.iscourse.api.domain.member.Member;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.JoinColumn;
@@ -17,8 +18,10 @@ public abstract class BaseEntity extends BaseTimeEntity {
     @CreatedBy
     @ManyToOne
     @JoinColumn(name= "created_by")
+    @JsonIgnore
     private Member createdBy;
 
+    @JsonIgnore
     protected Boolean enabled = true;
 
 }

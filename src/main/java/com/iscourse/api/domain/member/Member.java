@@ -45,4 +45,8 @@ public class Member extends BaseEntity {
         return memberRole;
     }
 
+    public void delete() {
+        this.enabled = false;
+    }
+
 }
