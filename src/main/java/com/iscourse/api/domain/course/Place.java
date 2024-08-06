@@ -42,6 +42,7 @@ public class Place extends BaseEntity {
 
     private String address1;
     private String address2;
+    private String zipcode;
     private Double mapx;
     private Double mapy;
     private String tel;
@@ -49,7 +50,7 @@ public class Place extends BaseEntity {
 
     public Place(PlaceType placeType, String name, LargeCategory largeCategory, MiddleCategory middleCategory,
                  Tag tag, State state, City city, String address1,
-                 String address2, Double mapx, Double mapy, String tel, String image) {
+                 String address2, String zipcode, Double mapx, Double mapy, String tel, String image) {
         this.placeType = placeType;
         this.name = name;
         this.largeCategory = largeCategory;
@@ -59,6 +60,7 @@ public class Place extends BaseEntity {
         this.city = city;
         this.address1 = address1;
         this.address2 = address2;
+        this.zipcode = zipcode;
         this.mapx = mapx;
         this.mapy = mapy;
         this.tel = tel;

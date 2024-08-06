@@ -23,7 +23,7 @@ class DealRepositoryTest {
     public void save() {
         // given
         Deal deal = new Deal("삼성역", "삼성돈까스2", "삼성돈까스 자유이용권2", 10000, 5000, 50,
-                "월회수목금", "토일", "서울시 강남구 테헤란로 1", "삼성빌딩 301호", "0212341234", "00000.00", "00000.00", true);
+                "월회수목금", "토일", "서울시 강남구 테헤란로 1", "삼성빌딩 301호", "0212341234", 00000.00, 00000.00, true);
         //when
         dealRepository.save(deal);
         UploadFile uploadFile = new UploadFile("test.jpg", "test.jpg", "jpg", RelatedType.DEAL, deal.getId());
