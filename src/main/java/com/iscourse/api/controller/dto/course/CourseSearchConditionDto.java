@@ -9,6 +9,6 @@ import java.util.Set;
 @Data
 public class CourseSearchConditionDto {
     private String name;
-    private Set<String> tagList = new HashSet<>();
+    private Set<String> tagCodeList = new HashSet<>();
     private MemberRoleType courseType;
 }

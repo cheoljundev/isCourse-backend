@@ -4,7 +4,6 @@ import com.iscourse.api.controller.dto.course.CourseSearchConditionDto;
 import com.iscourse.api.domain.Tag;
 import com.iscourse.api.domain.course.dto.*;
 import com.iscourse.api.domain.member.MemberRoleType;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
@@ -180,10 +179,10 @@ public class CourseQueryRepository {
     }
 
     public Page<CourseAdminListDto> adminList(CourseSearchConditionDto condition, Pageable pageable) {
-        JPQLQuery<Long> courseIdsByTags = condition.getTagList().isEmpty() ? null : JPAExpressions
+        JPQLQuery<Long> courseIdsByTags = condition.getTagCodeList().isEmpty() ? null : JPAExpressions
                 .select(courseTag.course.id)
                 .from(courseTag)
-                .where(courseTag.tag.code.in(condition.getTagList()));
+                .where(courseTag.tag.code.in(condition.getTagCodeList()));
 
         JPAQuery<CourseAdminListDto> query = queryFactory
                 .select(new QCourseAdminListDto(
