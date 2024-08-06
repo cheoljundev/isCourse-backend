@@ -2,6 +2,7 @@ package com.iscourse.api.controller;
 
 import com.iscourse.api.controller.dto.course.*;
 import com.iscourse.api.domain.course.dto.*;
+import com.iscourse.api.domain.dto.TagDto;
 import com.iscourse.api.domain.member.dto.MemberLoginDto;
 import com.iscourse.api.repository.course.CourseQueryRepository;
 import com.iscourse.api.repository.course.PlaceQueryRepository;
@@ -129,6 +130,11 @@ public class CourseController {
     @GetMapping("manager/middle-category")
     public List<MiddleCategoryDto> getMiddleCategory(@RequestParam("parent") Long parentId) {
         return placeQueryRepository.getMiddleCategory(parentId);
+    }
+
+    @GetMapping("manager/tag")
+    public List<TagDto> getTag(@RequestParam("parent") Long parentId) {
+        return placeQueryRepository.getTags(parentId);
     }
 
 

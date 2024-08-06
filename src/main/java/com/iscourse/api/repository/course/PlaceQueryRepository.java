@@ -1,10 +1,9 @@
 package com.iscourse.api.repository.course;
 
 import com.iscourse.api.controller.dto.course.PlaceSearchConditionDto;
-import com.iscourse.api.domain.course.QLargeCategory;
-import com.iscourse.api.domain.course.QMiddleCategory;
-import com.iscourse.api.domain.course.QPlaceType;
 import com.iscourse.api.domain.course.dto.*;
+import com.iscourse.api.domain.dto.QTagDto;
+import com.iscourse.api.domain.dto.TagDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -16,10 +15,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.iscourse.api.domain.QTag.tag;
 import static com.iscourse.api.domain.course.QLargeCategory.largeCategory;
 import static com.iscourse.api.domain.course.QMiddleCategory.middleCategory;
 import static com.iscourse.api.domain.course.QPlace.place;
-import static com.iscourse.api.domain.course.QPlaceType.*;
+import static com.iscourse.api.domain.course.QPlaceType.placeType;
 
 @Repository
 @RequiredArgsConstructor
@@ -63,6 +63,39 @@ public class PlaceQueryRepository {
                 .fetch();
     }
 
+    public List<LargeCategoryDto> getLargeCategory(Long parentId) {
+        return queryFactory
+                .select(new QLargeCategoryDto(
+                        largeCategory.code,
+                        largeCategory.name
+                ))
+                .from(largeCategory)
+                .where(largeCategory.parent.id.eq(parentId))
+                .fetch();
+    }
+
+    public List<MiddleCategoryDto> getMiddleCategory(Long parentId) {
+        return queryFactory
+                .select(new QMiddleCategoryDto(
+                        middleCategory.code,
+                        middleCategory.name
+                ))
+                .from(middleCategory)
+                .where(middleCategory.parent.id.eq(parentId))
+                .fetch();
+    }
+
+    public List<TagDto> getTags(Long parentId) {
+        return queryFactory
+                .select(new QTagDto(
+                        tag.code,
+                        tag.name
+                ))
+                .from(tag)
+                .where(tag.parent.id.eq(parentId))
+                .fetch();
+    }
+
     private BooleanExpression placeTypeEq(String placeTypeCode) {
         return placeTypeCode != null ? place.placeType.code.eq(placeTypeCode) : null;
     }
@@ -91,25 +124,5 @@ public class PlaceQueryRepository {
         return name != null ? place.name.contains(name) : null;
     }
 
-    public List<LargeCategoryDto> getLargeCategory(Long parentId) {
-        return queryFactory
-                .select(new QLargeCategoryDto(
-                        largeCategory.code,
-                        largeCategory.name
-                ))
-                .from(largeCategory)
-                .where(largeCategory.parent.id.eq(parentId))
-                .fetch();
-    }
 
-    public List<MiddleCategoryDto> getMiddleCategory(Long parentId) {
-        return queryFactory
-                .select(new QMiddleCategoryDto(
-                        middleCategory.code,
-                        middleCategory.name
-                ))
-                .from(middleCategory)
-                .where(middleCategory.parent.id.eq(parentId))
-                .fetch();
-    }
 }
