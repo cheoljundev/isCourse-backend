@@ -1,6 +1,6 @@
 package com.iscourse.api.service;
 
-import com.iscourse.api.controller.dto.deal.AddDealDto;
+import com.iscourse.api.domain.deal.dto.AddDealDto;
 import com.iscourse.api.domain.RelatedType;
 import com.iscourse.api.domain.UploadFile;
 import com.iscourse.api.domain.deal.Deal;

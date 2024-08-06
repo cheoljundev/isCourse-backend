@@ -1,4 +1,4 @@
-package com.iscourse.api.controller.dto.course;
+package com.iscourse.api.domain.course.dto;
 
 import lombok.Data;
 
