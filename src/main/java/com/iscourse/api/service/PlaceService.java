@@ -60,9 +60,8 @@ public class PlaceService {
                 "&cat1=" + (condition.getLargeCategoryCode() == null ? "" : UriUtils.encode(condition.getLargeCategoryCode(), StandardCharsets.UTF_8)) +
                 "&cat2=" + (condition.getMiddleCategoryCode() == null ? "" : UriUtils.encode(condition.getMiddleCategoryCode(), StandardCharsets.UTF_8)) +
                 "&cat3=" + (condition.getTagCode() == null ? "" : UriUtils.encode(condition.getTagCode(), StandardCharsets.UTF_8)) +
-                "&pageNo=" + pageable.getOffset() +
+                "&pageNo=" + pageable.getPageNumber() +
                 "&_type=json";
-
 
         ApiResponse.Body body = webClient.get()
                 .uri(uri)
