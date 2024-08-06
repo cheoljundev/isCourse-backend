@@ -1,8 +1,11 @@
 package com.iscourse.api.repository.course;
 
 import com.iscourse.api.controller.dto.course.PlaceSearchConditionDto;
+import com.iscourse.api.domain.course.QPlaceType;
 import com.iscourse.api.domain.course.dto.PlaceListDto;
+import com.iscourse.api.domain.course.dto.PlaceTypeDto;
 import com.iscourse.api.domain.course.dto.QPlaceListDto;
+import com.iscourse.api.domain.course.dto.QPlaceTypeDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.iscourse.api.domain.course.QPlace.place;
+import static com.iscourse.api.domain.course.QPlaceType.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -46,6 +50,16 @@ public class PlaceQueryRepository {
 
         int total = contents.size();
         return PageableExecutionUtils.getPage(contents, pageable, () -> total);
+    }
+
+    public List<PlaceTypeDto> getPlaceTypes() {
+        return queryFactory
+                .select(new QPlaceTypeDto(
+                        placeType.code,
+                        placeType.name
+                ))
+                .from(placeType)
+                .fetch();
     }
 
     private BooleanExpression placeTypeEq(String placeTypeCode) {

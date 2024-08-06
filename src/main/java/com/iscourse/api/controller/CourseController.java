@@ -1,10 +1,12 @@
 package com.iscourse.api.controller;
 
 import com.iscourse.api.controller.dto.course.*;
+import com.iscourse.api.domain.course.PlaceType;
 import com.iscourse.api.domain.course.dto.*;
 import com.iscourse.api.domain.member.dto.MemberLoginDto;
 import com.iscourse.api.repository.course.CourseQueryRepository;
 import com.iscourse.api.repository.course.PlaceQueryRepository;
+import com.iscourse.api.repository.course.PlaceTypeRepository;
 import com.iscourse.api.repository.member.MemberCourseQueryRepository;
 import com.iscourse.api.repository.member.MemberPlaceQueryRepository;
 import com.iscourse.api.service.CourseService;
@@ -30,6 +32,7 @@ public class CourseController {
     private final MemberPlaceQueryRepository memberPlaceQueryRepository;
     private final PlaceQueryRepository placeQueryRepository;
     private final PlaceService placeService;
+    private final PlaceTypeRepository placeTypeRepository;
 
     @GetMapping("course")
     public Page<CourseFrontListDto> frontList(Pageable pageable) {
@@ -114,6 +117,11 @@ public class CourseController {
     @GetMapping("manager/place/search")
     public Page<PlaceSelectListDto> getPlaceByApi(@ModelAttribute TourApiSearchConditionDto condition, Pageable pageable){
         return placeService.getPlaceByApi(condition, pageable);
+    }
+
+    @GetMapping("manager/place-type")
+    public List<PlaceTypeDto> getPlaceType() {
+        return placeQueryRepository.getPlaceTypes();
     }
 
 
