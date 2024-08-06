@@ -11,9 +11,9 @@ public class PlaceListDto {
     private String image;
 
     @QueryProjection
-    public PlaceListDto(MemberPlace memberPlace) {
-        this.id = memberPlace.getPlace().getId();
-        this.name = memberPlace.getPlace().getName();
-        this.image = memberPlace.getPlace().getImage();
+    public PlaceListDto(Long id, String name, String image) {
+        this.id = id;
+        this.name = name;
+        this.image = image;
     }
 }

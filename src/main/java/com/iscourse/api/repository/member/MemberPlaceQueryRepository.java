@@ -26,7 +26,11 @@ public class MemberPlaceQueryRepository {
 
     public Page<PlaceListDto> getMemberPlaceList(Pageable pageable) {
         JPAQuery<PlaceListDto> query = queryFactory
-                .select(new QPlaceListDto(memberPlace))
+                .select(new QPlaceListDto(
+                        memberPlace.id,
+                        memberPlace.place.name,
+                        memberPlace.place.image
+                ))
                 .from(memberPlace)
                 .where(memberPlace.enabled.eq(true))
                 .offset(pageable.getOffset())
