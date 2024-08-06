@@ -1,4 +1,4 @@
-package com.iscourse.api.swagger.config;
+package com.iscourse.api.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
