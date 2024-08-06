@@ -46,8 +46,8 @@ public class DealController {
     // 매니저 권한
 
     @GetMapping("manager/deal")
-    public Page<DealAdminListDto> adminList(@RequestBody DealAdminConditionDto condition, Pageable pageable) {
-        return dealQueryRepository.findAdminList(condition.getName(), condition.getMinPrice(), condition.getMaxPrice(), pageable);
+    public Page<DealAdminListDto> adminList(@ModelAttribute DealAdminConditionDto condition, Pageable pageable) {
+        return dealQueryRepository.findAdminList(condition, pageable);
     }
 
     @PostMapping("manager/deal")

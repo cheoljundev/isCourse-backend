@@ -58,7 +58,7 @@ public class CourseController {
     }
 
     @GetMapping("recommend-course")
-    public Page<CourseFrontListDto> recommend(@RequestBody RecommendCourseConditionDto condition) {
+    public Page<CourseFrontListDto> recommend(@ModelAttribute RecommendCourseConditionDto condition) {
         return courseQueryRepository.recommendCourse(condition.getMapx(), condition.getMapy(), condition.getMaxDistance());
     }
 
@@ -78,7 +78,7 @@ public class CourseController {
     }
 
     @GetMapping("manager/course")
-    public Page<CourseAdminListDto> adminList(@RequestBody CourseSearchConditionDto condition, Pageable pageable) {
+    public Page<CourseAdminListDto> adminList(@ModelAttribute CourseSearchConditionDto condition, Pageable pageable) {
         return courseQueryRepository.adminList(condition, pageable);
     }
 
@@ -103,7 +103,7 @@ public class CourseController {
     }
 
     @GetMapping("manager/place")
-    public Page<PlaceListDto> adminPlaceList(@RequestBody PlaceSearchConditionDto condition, Pageable pageable) {
+    public Page<PlaceListDto> adminPlaceList(@ModelAttribute PlaceSearchConditionDto condition, Pageable pageable) {
         return placeQueryRepository.adminList(condition, pageable);
     }
 
