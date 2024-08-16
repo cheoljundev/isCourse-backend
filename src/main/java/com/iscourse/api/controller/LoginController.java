@@ -49,6 +49,11 @@ public class LoginController {
         }
     }
 
+    @PostMapping("check-token")
+    public ResponseEntity<String> checkToken() {
+        return ResponseEntity.ok("Token is valid");
+    }
+
     @GetMapping("tag")
     public List<TagDto> getTags() {
         return memberService.getTags();
