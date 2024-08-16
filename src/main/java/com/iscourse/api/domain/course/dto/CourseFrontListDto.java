@@ -5,6 +5,7 @@ import com.iscourse.api.domain.member.MemberRoleType;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -15,6 +16,8 @@ public class CourseFrontListDto {
     private String state;
     private String image;
     private MemberRoleType courseType;
+    private Integer likes;
+    private List<String> tags = new ArrayList<>();
 
     @QueryProjection
     public CourseFrontListDto(Course course, String state, String image) {
@@ -24,5 +27,6 @@ public class CourseFrontListDto {
         this.state = state;
         this.image = image;
         this.courseType = course.getCourseType();
+        this.likes = course.getLikes();
     }
 }
