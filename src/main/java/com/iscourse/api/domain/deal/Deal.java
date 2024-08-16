@@ -19,6 +19,7 @@ public class Deal extends BaseEntity {
     private String station;
     private String name;
     private String product;
+    private String description;
     private Integer beforePrice;
     private Integer price;
     private Integer discountRate;
@@ -31,10 +32,11 @@ public class Deal extends BaseEntity {
     private Double mapy;
     private Boolean parking;
 
-    public Deal(String station, String name, String product, Integer beforePrice, Integer price, Integer discountRate, String opening, String closing, String address1, String address2, String contact, Double mapx, Double mapy, boolean parking) {
+    public Deal(String station, String name, String product, String description, Integer beforePrice, Integer price, Integer discountRate, String opening, String closing, String address1, String address2, String contact, Double mapx, Double mapy, boolean parking) {
         this.station = station;
         this.name = name;
         this.product = product;
+        this.description = description;
         this.beforePrice = beforePrice;
         this.price = price;
         this.discountRate = discountRate;

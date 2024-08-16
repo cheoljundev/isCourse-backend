@@ -1,7 +1,9 @@
 package com.iscourse.api.domain.deal.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.iscourse.api.domain.deal.Deal;
 import com.iscourse.api.domain.dto.UploadFileDto;
+import com.iscourse.api.formatter.PriceSerializer;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 
@@ -12,7 +14,10 @@ public class DealDto {
     private String station;
     private String name;
     private String product;
+    private String description;
+    @JsonSerialize(using = PriceSerializer.class)
     private Integer beforePrice;
+    @JsonSerialize(using = PriceSerializer.class)
     private Integer price;
     private Integer discountRate;
     private String opening;
@@ -30,6 +35,7 @@ public class DealDto {
         this.station = deal.getStation();
         this.name = deal.getName();
         this.product = deal.getProduct();
+        this.description = deal.getDescription();
         this.beforePrice = deal.getBeforePrice();
         this.price = deal.getPrice();
         this.discountRate = deal.getDiscountRate();

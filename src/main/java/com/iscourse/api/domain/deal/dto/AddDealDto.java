@@ -7,6 +7,7 @@ public class AddDealDto {
     private String station;
     private String name;
     private String product;
+    private String description;
     private Integer beforePrice;
     private Integer price;
     private String opening;

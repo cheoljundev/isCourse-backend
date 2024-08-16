@@ -46,6 +46,7 @@ public class DealService {
                 addDealDto.getStation(),
                 addDealDto.getName(),
                 addDealDto.getProduct(),
+                addDealDto.getDescription(),
                 addDealDto.getBeforePrice(),
                 addDealDto.getPrice(),
                 (int)((double) addDealDto.getPrice() / addDealDto.getBeforePrice() * 100),
