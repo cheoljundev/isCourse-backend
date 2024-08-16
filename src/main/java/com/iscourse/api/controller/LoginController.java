@@ -54,6 +54,16 @@ public class LoginController {
         return ResponseEntity.ok("Token is valid");
     }
 
+    @PostMapping("manager/check-token")
+    public ResponseEntity<String> checkManagerToken() {
+        return ResponseEntity.ok("Manager Token is valid");
+    }
+
+    @PostMapping("admin/check-token")
+    public ResponseEntity<String> checkAdminToken() {
+        return ResponseEntity.ok("Admin Token is valid");
+    }
+
     @GetMapping("tag")
     public List<TagDto> getTags() {
         return memberService.getTags();
