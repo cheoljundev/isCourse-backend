@@ -1,8 +1,10 @@
 package com.iscourse.api.controller;
 
+import com.iscourse.api.controller.dto.ValidateUsernameDto;
 import com.iscourse.api.domain.dto.TagDto;
 import com.iscourse.api.controller.dto.login.LoginRequest;
 import com.iscourse.api.domain.member.dto.SignUpMemberDto;
+import com.iscourse.api.repository.member.MemberQueryRepository;
 import com.iscourse.api.security.jwt.JwtUtil;
 import com.iscourse.api.security.token.RestAuthenticationToken;
 import com.iscourse.api.service.MemberService;
@@ -22,10 +24,16 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/")
 public class LoginController {
+    private final MemberQueryRepository memberQueryRepository;
     private final MemberService memberService;
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
+
+    @PostMapping("validate-username")
+    public ResponseEntity<Boolean> validateUsername(@RequestBody ValidateUsernameDto usernameDto) {
+        return ResponseEntity.ok(memberQueryRepository.validateUsername(usernameDto.getUsername()));
+    }
 
     @PostMapping("signup")
     @ResponseStatus(HttpStatus.OK)

@@ -10,6 +10,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -20,6 +21,7 @@ import java.util.List;
 import static com.iscourse.api.domain.member.QMember.member;
 import static com.iscourse.api.domain.member.QMemberRole.memberRole;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class MemberQueryRepository {
@@ -89,5 +91,16 @@ public class MemberQueryRepository {
         selectMember.setMemberRole(memberRole);
 
         return selectMember;
+    }
+
+    public Boolean validateUsername(String username) {
+        log.info("username: {}", username);
+        if (username == null || username.isEmpty()) {
+            return false;
+        }
+        return queryFactory
+                .selectFrom(member)
+                .where(member.username.eq(username))
+                .fetchFirst() == null;
     }
 }
