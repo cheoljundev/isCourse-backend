@@ -3,6 +3,8 @@ package com.iscourse.api.controller;
 import com.iscourse.api.controller.dto.ValidateUsernameDto;
 import com.iscourse.api.domain.dto.TagDto;
 import com.iscourse.api.controller.dto.login.LoginRequest;
+import com.iscourse.api.domain.member.dto.MemberContext;
+import com.iscourse.api.domain.member.dto.MemberLoginDto;
 import com.iscourse.api.domain.member.dto.SignUpMemberDto;
 import com.iscourse.api.repository.member.MemberQueryRepository;
 import com.iscourse.api.security.jwt.JwtUtil;
@@ -48,8 +50,13 @@ public class LoginController {
                     new RestAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
             // 인증 성공 후, 사용자 세부정보를 로드하여 JWT 생성
-            UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getUsername());
-            String jwt = jwtUtil.generateToken(userDetails.getUsername());
+            MemberContext memberContext = (MemberContext) userDetailsService.loadUserByUsername(loginRequest.getUsername());
+
+            if (!memberContext.isEnabled()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Disabled user");
+            }
+
+            String jwt = jwtUtil.generateToken(memberContext.getUsername());
             return ResponseEntity.ok(jwt); // JWT 토큰을 클라이언트에 반환
         } catch (AuthenticationException e) {
             // 인증 실패 시, 401 Unauthorized 상태 코드 반환

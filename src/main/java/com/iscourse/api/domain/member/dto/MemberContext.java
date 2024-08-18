@@ -54,4 +54,5 @@ public class MemberContext implements UserDetails {
     public boolean isEnabled() {
         return memberLoginDto.getEnabled();
     }
+
 }

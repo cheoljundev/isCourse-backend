@@ -54,4 +54,9 @@ public class MemberController {
         memberQueryRepository.updateMemberInfo(memberLoginDto.getId(), memberEditInfoUpdateDto);
     }
 
+    @DeleteMapping("user/info")
+    public void deleteMemberInfo(@AuthenticationPrincipal MemberLoginDto memberLoginDto) {
+        memberService.deleteMember(memberLoginDto.getId());
+    }
+
 }
