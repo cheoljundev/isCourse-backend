@@ -43,8 +43,8 @@ public class CourseController {
     }
 
     @PatchMapping("course-like/{id}")
-    public void like(@PathVariable("id") Long courseId, @AuthenticationPrincipal MemberLoginDto memberLoginDto) {
-        courseService.like(courseId, memberLoginDto.getId());
+    public Integer like(@PathVariable("id") Long courseId, @AuthenticationPrincipal MemberLoginDto memberLoginDto) {
+        return courseService.like(courseId, memberLoginDto.getId());
     }
 
     @PostMapping("select-course/{id}")
