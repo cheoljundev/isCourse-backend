@@ -1,5 +1,6 @@
 package com.iscourse.api.repository.member;
 
+import com.iscourse.api.domain.course.QCourseTag;
 import com.iscourse.api.domain.course.dto.CourseFrontListDto;
 import com.iscourse.api.domain.course.dto.QCourseFrontListDto;
 import com.querydsl.jpa.JPAExpressions;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.iscourse.api.domain.course.QCoursePlace.coursePlace;
+import static com.iscourse.api.domain.course.QCourseTag.courseTag;
 import static com.iscourse.api.domain.member.QMemberCourse.memberCourse;
 
 @Repository
@@ -43,6 +45,14 @@ public class MemberCourseQueryRepository {
                 .limit(pageable.getPageSize());
 
         List<CourseFrontListDto> contents = query.fetch();
+
+        contents.forEach(courseFrontListDto -> {
+            courseFrontListDto.setTags(queryFactory
+                    .select(courseTag.tag.name)
+                    .from(courseTag)
+                    .where(courseTag.course.id.eq(courseFrontListDto.getId()))
+                    .fetch());
+        });
 
         int total = contents.size();
 
