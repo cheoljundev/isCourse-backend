@@ -121,6 +121,15 @@ public class CourseQueryRepository {
 
         List<CourseFrontListDto> contents = query.fetch();
 
+        contents.forEach(courseFrontListDto -> {
+            List<Tag> tags = queryFactory
+                    .select(courseTag.tag)
+                    .from(courseTag)
+                    .where(courseTag.course.id.eq(courseFrontListDto.getId()), courseTag.enabled.eq(true))
+                    .fetch();
+            tags.forEach(tag -> courseFrontListDto.getTags().add(tag.getName()));
+        });
+
         int total = contents.size();
         return PageableExecutionUtils.getPage(contents, pageable, () -> total);
     }
