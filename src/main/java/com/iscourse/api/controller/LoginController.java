@@ -1,8 +1,12 @@
 package com.iscourse.api.controller;
 
 import com.iscourse.api.controller.dto.ValidateUsernameDto;
+import com.iscourse.api.controller.dto.login.CheckResponse;
+import com.iscourse.api.controller.dto.login.LoginResponse;
 import com.iscourse.api.domain.dto.TagDto;
 import com.iscourse.api.controller.dto.login.LoginRequest;
+import com.iscourse.api.domain.member.MemberRole;
+import com.iscourse.api.domain.member.MemberRoleType;
 import com.iscourse.api.domain.member.dto.MemberContext;
 import com.iscourse.api.domain.member.dto.MemberLoginDto;
 import com.iscourse.api.domain.member.dto.SignUpMemberDto;
@@ -11,17 +15,20 @@ import com.iscourse.api.security.jwt.JwtUtil;
 import com.iscourse.api.security.token.RestAuthenticationToken;
 import com.iscourse.api.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/")
@@ -44,7 +51,7 @@ public class LoginController {
     }
 
     @PostMapping("signin")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new RestAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -53,20 +60,55 @@ public class LoginController {
             MemberContext memberContext = (MemberContext) userDetailsService.loadUserByUsername(loginRequest.getUsername());
 
             if (!memberContext.isEnabled()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Disabled user");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LoginResponse(null, "Disabled user"));
             }
 
             String jwt = jwtUtil.generateToken(memberContext.getUsername());
-            return ResponseEntity.ok(jwt); // JWT 토큰을 클라이언트에 반환
+            return ResponseEntity.status(HttpStatus.OK).body(new LoginResponse(
+                    jwt,
+                    "Success"
+            )); // JWT 토큰을 클라이언트에 반환
         } catch (AuthenticationException e) {
-            // 인증 실패 시, 401 Unauthorized 상태 코드 반환
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new LoginResponse(
+                    null,
+                    "Invalid user"
+            ));
         }
     }
 
-    @PostMapping("check-token")
-    public ResponseEntity<String> checkToken() {
-        return ResponseEntity.ok("Token is valid");
+    @GetMapping("check-token")
+    public ResponseEntity<CheckResponse> checkToken(@AuthenticationPrincipal MemberLoginDto memberLoginDto) {
+        if (memberLoginDto == null) {
+            return ResponseEntity.ok(new CheckResponse(
+                    false,
+                    false,
+                    false
+            ));
+        }
+
+        boolean isSignin = false;
+        boolean isManager = false;
+        boolean isAdmin = false;
+
+        for (MemberRole memberRole : memberLoginDto.getMemberRoles()) {
+            switch (memberRole.getRoleType()) {
+                case ROLE_USER:
+                    isSignin = true;
+                    break;
+                case ROLE_MANAGER:
+                    isManager = true;
+                    break;
+                case ROLE_ADMIN:
+                    isAdmin = true;
+                    break;
+            }
+        }
+
+        return ResponseEntity.ok(new CheckResponse(
+                isSignin,
+                isManager,
+                isAdmin
+        ));
     }
 
     @PostMapping("manager/check-token")
