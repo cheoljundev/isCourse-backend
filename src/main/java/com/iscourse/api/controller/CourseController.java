@@ -68,8 +68,8 @@ public class CourseController {
     }
 
     @GetMapping("user/place")
-    public Page<PlaceListDto> getMemberPlaceList(Pageable pageable) {
-        return memberPlaceQueryRepository.getMemberPlaceList(pageable);
+    public Page<PlaceListDto> getMemberPlaceList(@AuthenticationPrincipal MemberLoginDto memberLoginDto, Pageable pageable) {
+        return memberPlaceQueryRepository.getMemberPlaceList(memberLoginDto.getId(), pageable);
     }
 
     @GetMapping("user/shared-course")
