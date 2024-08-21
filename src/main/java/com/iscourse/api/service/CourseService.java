@@ -96,6 +96,27 @@ public class CourseService {
 
     @Transactional
     public void share(AddCourseDto addCourseDto) {
+        if (addCourseDto.getName() == null || addCourseDto.getName().isEmpty()) {
+            throw new IllegalArgumentException("코스 이름을 입력해주세요.");
+        }
+        if (addCourseDto.getHour() == null || addCourseDto.getHour() <= 0) {
+            throw new IllegalArgumentException("시간을 입력해주세요.");
+        }
+        if (addCourseDto.getMinute() == null || addCourseDto.getMinute() <= 0) {
+            throw new IllegalArgumentException("분을 입력해주세요.");
+        }
+        if (addCourseDto.getPlaceIdList() == null || addCourseDto.getPlaceIdList().isEmpty()) {
+            throw new IllegalArgumentException("장소를 선택해주세요.");
+        }
+        if (addCourseDto.getTagList() == null || addCourseDto.getTagList().isEmpty()) {
+            throw new IllegalArgumentException("태그를 선택해주세요.");
+        }
+        if (addCourseDto.getIntroduce() == null || addCourseDto.getIntroduce().isEmpty()) {
+            throw new IllegalArgumentException("소개를 입력해주세요.");
+        } else if (addCourseDto.getIntroduce().length() > 200) {
+            throw new IllegalArgumentException("소개는 200자 이내로 입력해주세요.");
+        }
+
         Course course = new Course(
                 addCourseDto.getName(),
                 addCourseDto.getHour(),
