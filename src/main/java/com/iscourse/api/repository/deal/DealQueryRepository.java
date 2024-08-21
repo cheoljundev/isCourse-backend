@@ -32,23 +32,26 @@ public class DealQueryRepository {
     public List<DealListDto> findList() {
 
         JPAQuery<DealListDto> query = queryFactory
-                .select(new QDealListDto(
-                        deal,
-                        new QUploadFileDto(
-                                uploadFile.originalFileName,
-                                uploadFile.storedFileName,
-                                uploadFile.fileType
-                        )
-                ))
+                .select(new QDealListDto(deal))
                 .from(deal)
-                .leftJoin(uploadFile)
-                .on(
-                        uploadFile.relatedType.eq(RelatedType.DEAL),
-                        uploadFile.relatedId.eq(deal.id)
-                )
                 .where(deal.enabled.eq(true));
 
-        return query.fetch();
+        List<DealListDto> fetch = query.fetch();
+        fetch.forEach(dealListDto -> {
+            UploadFileDto image = queryFactory
+                    .select(new QUploadFileDto(
+                            uploadFile.originalFileName,
+                            uploadFile.storedFileName,
+                            uploadFile.fileType
+                    ))
+                    .from(uploadFile)
+                    .where(uploadFile.relatedType.eq(RelatedType.DEAL).and(uploadFile.relatedId.eq(dealListDto.getId())), uploadFile.enabled.eq(true))
+                    .fetchFirst();
+
+            dealListDto.setImage(image);
+        });
+
+        return fetch;
 
     }
 

@@ -19,13 +19,12 @@ public class DealListDto {
     private UploadFileDto image;
 
     @QueryProjection
-    public DealListDto(Deal deal, UploadFileDto image) {
+    public DealListDto(Deal deal) {
         this.id = deal.getId();
         this.station = deal.getStation();
         this.name = deal.getName();
         this.product = deal.getProduct();
         this.price = deal.getPrice();
         this.discountRate = deal.getDiscountRate();
-        this.image = image;
     }
 }
