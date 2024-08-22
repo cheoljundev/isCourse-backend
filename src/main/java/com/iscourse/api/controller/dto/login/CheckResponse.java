@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CheckResponse {
-    private Boolean isSignin;
+    private Boolean isSignIn;
     private Boolean isManager;
     private Boolean isAdmin;
 }
