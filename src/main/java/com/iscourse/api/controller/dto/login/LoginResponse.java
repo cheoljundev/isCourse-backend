@@ -10,4 +10,5 @@ import java.util.List;
 public class LoginResponse {
     private String jwt;
     private String status;
+    private CheckResponse checkResponse;
 }

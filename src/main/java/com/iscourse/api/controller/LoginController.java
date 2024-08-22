@@ -59,19 +59,43 @@ public class LoginController {
             // 인증 성공 후, 사용자 세부정보를 로드하여 JWT 생성
             MemberContext memberContext = (MemberContext) userDetailsService.loadUserByUsername(loginRequest.getUsername());
 
+            boolean isSignin = false;
+            boolean isManager = false;
+            boolean isAdmin = false;
+
+            for (MemberRole memberRole : memberContext.getMemberLoginDto().getMemberRoles()) {
+                switch (memberRole.getRoleType()) {
+                    case ROLE_USER:
+                        isSignin = true;
+                        break;
+                    case ROLE_MANAGER:
+                        isManager = true;
+                        break;
+                    case ROLE_ADMIN:
+                        isAdmin = true;
+                        break;
+                }
+            }
+
             if (!memberContext.isEnabled()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LoginResponse(null, "Disabled user"));
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LoginResponse(null, "Disabled user", null));
             }
 
             String jwt = jwtUtil.generateToken(memberContext.getUsername());
             return ResponseEntity.status(HttpStatus.OK).body(new LoginResponse(
                     jwt,
-                    "Success"
+                    "Success",
+                    new CheckResponse(
+                            isSignin,
+                            isManager,
+                            isAdmin
+                    )
             )); // JWT 토큰을 클라이언트에 반환
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new LoginResponse(
                     null,
-                    "Invalid user"
+                    "Invalid user",
+                    null
             ));
         }
     }
