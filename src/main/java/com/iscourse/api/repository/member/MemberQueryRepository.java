@@ -42,7 +42,7 @@ public class MemberQueryRepository {
 
 
     public Page<MemberListDto> getMemberList(MemberSearchCondition condition, Pageable pageable) {
-        JPAQuery<MemberListDto> query = queryFactory
+        List<MemberListDto> contents = queryFactory
                 .select(new QMemberListDto(
                         member.id,
                         member.username,
@@ -56,9 +56,22 @@ public class MemberQueryRepository {
                         member.enabled.isTrue()
                 )
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize());
-        List<MemberListDto> contents = query.fetch();
-        int total = contents.size();
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        List<Member> countQuery = queryFactory
+                .selectFrom(member)
+                .where(
+                        usernameEq(condition.getUsername()),
+                        nicknameEq(condition.getNickname()),
+                        genderEq(condition.getGenderType()),
+                        member.enabled.isTrue()
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        int total = countQuery.size();
         return PageableExecutionUtils.getPage(contents, pageable, () -> total);
     }
 

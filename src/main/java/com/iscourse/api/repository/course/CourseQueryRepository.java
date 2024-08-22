@@ -2,6 +2,7 @@ package com.iscourse.api.repository.course;
 
 import com.iscourse.api.controller.dto.course.CourseSearchConditionDto;
 import com.iscourse.api.domain.Tag;
+import com.iscourse.api.domain.course.Course;
 import com.iscourse.api.domain.course.dto.*;
 import com.iscourse.api.domain.member.MemberRoleType;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -63,7 +64,7 @@ public class CourseQueryRepository {
     }
 
     public Page<CourseFrontListDto> frontList(Pageable pageable) {
-        JPAQuery<CourseFrontListDto> query = queryFactory
+        List<CourseFrontListDto> contents = queryFactory
                 .select(new QCourseFrontListDto(
                         course,
                         JPAExpressions
@@ -80,9 +81,8 @@ public class CourseQueryRepository {
                 .from(course)
                 .where(course.courseType.eq(MemberRoleType.ROLE_USER), course.enabled.eq(true))
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize());
-
-        List<CourseFrontListDto> contents = query.fetch();
+                .limit(pageable.getPageSize())
+                .fetch();
 
         contents.forEach(courseFrontListDto -> {
             List<Tag> tags = queryFactory
@@ -93,14 +93,19 @@ public class CourseQueryRepository {
             tags.forEach(tag -> courseFrontListDto.getTags().add(tag.getName()));
         });
 
-        int total = contents.size();
+        List<Course> countQuery = queryFactory
+                .selectFrom(course)
+                .where(course.courseType.eq(MemberRoleType.ROLE_USER), course.enabled.eq(true))
+                .fetch();
+
+        int total = countQuery.size();
         return PageableExecutionUtils.getPage(contents, pageable, () -> total);
 
     }
 
     public Page<CourseFrontListDto> getMemberSharedList(Long memberId, Pageable pageable) {
 
-        JPAQuery<CourseFrontListDto> query = queryFactory
+        List<CourseFrontListDto> contents = queryFactory
                 .select(new QCourseFrontListDto(
                         course,
                         JPAExpressions
@@ -117,9 +122,8 @@ public class CourseQueryRepository {
                 .from(course)
                 .where(course.createdBy.id.eq(memberId), course.enabled.eq(true))
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize());
-
-        List<CourseFrontListDto> contents = query.fetch();
+                .limit(pageable.getPageSize())
+                .fetch();
 
         contents.forEach(courseFrontListDto -> {
             List<Tag> tags = queryFactory
@@ -130,18 +134,24 @@ public class CourseQueryRepository {
             tags.forEach(tag -> courseFrontListDto.getTags().add(tag.getName()));
         });
 
-        int total = contents.size();
+        List<Course> countQuery = queryFactory
+                .selectFrom(course)
+                .where(course.createdBy.id.eq(memberId), course.enabled.eq(true))
+                .fetch();
+
+        long total = countQuery.size();
+
         return PageableExecutionUtils.getPage(contents, pageable, () -> total);
     }
 
-    public Page<CourseFrontListDto> recommendCourse(double mapx, double mapy, Integer maxDistance) {
+    public Page<CourseFrontListDto> recommendCourse(double mapx, double mapy, Integer maxDistance, Pageable pageable) {
         NumberExpression<Double> distance = Expressions.numberTemplate(
                 Double.class,
                 "6371 * ACOS(COS(RADIANS({0})) * COS(RADIANS({1})) * COS(RADIANS({2}) - RADIANS({3})) + SIN(RADIANS({0})) * SIN(RADIANS({1}))) * 1000",
                 mapx, course.mapx, course.mapy, mapy
         );
 
-        JPAQuery<CourseFrontListDto> query = queryFactory
+        List<CourseFrontListDto> contents = queryFactory
                 .select(new QCourseFrontListDto(
                         course,
                         JPAExpressions
@@ -157,12 +167,16 @@ public class CourseQueryRepository {
                 ))
                 .from(course)
                 .where(course.courseType.eq(MemberRoleType.ROLE_MANAGER), course.enabled.eq(true), distance.loe(maxDistance))
-                .offset(0)
-                .limit(10);
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
 
-        List<CourseFrontListDto> contents = query.fetch();
+        List<Course> countQuery = queryFactory
+                .selectFrom(course)
+                .where(course.courseType.eq(MemberRoleType.ROLE_MANAGER), course.enabled.eq(true), distance.loe(maxDistance))
+                .fetch();
 
-        int total = contents.size();
+        int total = countQuery.size();
         return PageableExecutionUtils.getPage(contents, Pageable.unpaged(), () -> total);
     }
 
@@ -202,7 +216,7 @@ public class CourseQueryRepository {
                 .from(courseTag)
                 .where(courseTag.tag.code.in(condition.getTagCodeList()));
 
-        JPAQuery<CourseAdminListDto> query = queryFactory
+        List<CourseAdminListDto> contents = queryFactory
                 .select(new QCourseAdminListDto(
                         course,
                         JPAExpressions
@@ -224,11 +238,20 @@ public class CourseQueryRepository {
                         courseTypeEq(condition.getCourseType())
                 )
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize());
+                .limit(pageable.getPageSize())
+                .fetch();
 
-        List<CourseAdminListDto> contents = query.fetch();
+        List<Course> countQuery = queryFactory
+                .selectFrom(course)
+                .where(
+                        course.enabled.eq(true),
+                        courseTagIn(courseIdsByTags),
+                        courseNameLike(condition.getName()),
+                        courseTypeEq(condition.getCourseType())
+                )
+                .fetch();
 
-        int total = contents.size();
+        int total = countQuery.size();
         return PageableExecutionUtils.getPage(contents, pageable, () -> total);
 
     }

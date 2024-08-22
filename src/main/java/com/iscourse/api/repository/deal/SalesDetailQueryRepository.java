@@ -1,6 +1,7 @@
 package com.iscourse.api.repository.deal;
 
 import com.iscourse.api.domain.deal.QSalesDetail;
+import com.iscourse.api.domain.deal.SalesDetail;
 import com.iscourse.api.domain.deal.dto.QSalesDetailDto;
 import com.iscourse.api.domain.deal.dto.SalesDetailDto;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -21,16 +22,22 @@ public class SalesDetailQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     public Page<SalesDetailDto> findList(Pageable pageable) {
-        JPAQuery<SalesDetailDto> query = queryFactory
+        List<SalesDetailDto> contents = queryFactory
                 .select(new QSalesDetailDto(salesDetail))
                 .from(salesDetail)
                 .where(salesDetail.enabled.eq(true))
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize());
+                .limit(pageable.getPageSize())
+                .fetch();
 
-        List<SalesDetailDto> contents = query.fetch();
+        List<SalesDetail> countQuery = queryFactory
+                .selectFrom(salesDetail)
+                .where(salesDetail.enabled.eq(true))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
 
-        int total = contents.size();
+        int total = countQuery.size();
         return PageableExecutionUtils.getPage(contents, pageable, () -> total);
     }
 }

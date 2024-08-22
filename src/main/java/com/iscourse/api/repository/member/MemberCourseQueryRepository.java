@@ -3,6 +3,7 @@ package com.iscourse.api.repository.member;
 import com.iscourse.api.domain.course.QCourseTag;
 import com.iscourse.api.domain.course.dto.CourseFrontListDto;
 import com.iscourse.api.domain.course.dto.QCourseFrontListDto;
+import com.iscourse.api.domain.member.MemberCourse;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -25,7 +26,7 @@ public class MemberCourseQueryRepository {
 
     public Page<CourseFrontListDto> getMemberSelectedList(Long memberId, Pageable pageable) {
 
-        JPAQuery<CourseFrontListDto> query = queryFactory
+        List<CourseFrontListDto> contents = queryFactory
                 .select(new QCourseFrontListDto(
                         memberCourse.course,
                         JPAExpressions
@@ -42,9 +43,8 @@ public class MemberCourseQueryRepository {
                 .from(memberCourse)
                 .where(memberCourse.member.id.eq(memberId))
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize());
-
-        List<CourseFrontListDto> contents = query.fetch();
+                .limit(pageable.getPageSize())
+                .fetch();
 
         contents.forEach(courseFrontListDto -> {
             courseFrontListDto.setTags(queryFactory
@@ -54,7 +54,12 @@ public class MemberCourseQueryRepository {
                     .fetch());
         });
 
-        int total = contents.size();
+        List<MemberCourse> countQuery = queryFactory
+                .selectFrom(memberCourse)
+                .where(memberCourse.member.id.eq(memberId))
+                .fetch();
+
+        int total = countQuery.size();
 
         return PageableExecutionUtils.getPage(contents, pageable, () -> total);
     }

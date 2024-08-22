@@ -58,8 +58,8 @@ public class CourseController {
     }
 
     @GetMapping("recommend-course")
-    public Page<CourseFrontListDto> recommend(@ModelAttribute RecommendCourseConditionDto condition) {
-        return courseQueryRepository.recommendCourse(condition.getMapx(), condition.getMapy(), condition.getMaxDistance());
+    public Page<CourseFrontListDto> recommend(@ModelAttribute RecommendCourseConditionDto condition, Pageable pageable) {
+        return courseQueryRepository.recommendCourse(condition.getMapx(), condition.getMapy(), condition.getMaxDistance(), pageable);
     }
 
     @GetMapping("user/course")

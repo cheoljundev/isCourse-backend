@@ -2,6 +2,7 @@ package com.iscourse.api.repository.deal;
 
 import com.iscourse.api.controller.dto.deal.DealAdminConditionDto;
 import com.iscourse.api.domain.RelatedType;
+import com.iscourse.api.domain.deal.Deal;
 import com.iscourse.api.domain.deal.dto.*;
 import com.iscourse.api.domain.dto.QUploadFileDto;
 import com.iscourse.api.domain.dto.UploadFileDto;
@@ -82,7 +83,7 @@ public class DealQueryRepository {
 
     public Page<DealAdminListDto> findAdminList(DealAdminConditionDto condition, Pageable pageable) {
 
-        JPQLQuery<DealAdminListDto> query = queryFactory
+        List<DealAdminListDto> contents = queryFactory
                 .select(new QDealAdminListDto(
                         deal
                 ))
@@ -92,11 +93,19 @@ public class DealQueryRepository {
                         priceBetween(condition.getMinPrice(), condition.getMaxPrice())
                 )
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize());
+                .limit(pageable.getPageSize())
+                .fetch();
 
-        List<DealAdminListDto> contents = query.fetch();
+        List<Deal> countQuery = queryFactory
+                .selectFrom(deal)
+                .where(
+                        nameLike(condition.getName()),
+                        priceBetween(condition.getMinPrice(), condition.getMaxPrice())
+                )
+                .fetch();
 
-        int total = contents.size();
+        long total = countQuery.size();
+
         return PageableExecutionUtils.getPage(contents, pageable, () -> total);
     }
 

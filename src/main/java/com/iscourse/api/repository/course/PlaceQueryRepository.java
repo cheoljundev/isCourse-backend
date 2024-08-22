@@ -1,6 +1,7 @@
 package com.iscourse.api.repository.course;
 
 import com.iscourse.api.controller.dto.course.PlaceSearchConditionDto;
+import com.iscourse.api.domain.course.Place;
 import com.iscourse.api.domain.course.QCity;
 import com.iscourse.api.domain.course.QState;
 import com.iscourse.api.domain.course.dto.*;
@@ -31,7 +32,7 @@ public class PlaceQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     public Page<PlaceListDto> adminList(PlaceSearchConditionDto condition, Pageable pageable) {
-        JPAQuery<PlaceListDto> query = queryFactory
+        List<PlaceListDto> contents = queryFactory
                 .select(new QPlaceListDto(
                         place.id,
                         place.name,
@@ -49,11 +50,25 @@ public class PlaceQueryRepository {
                         nameLike(condition.getName())
                 )
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize());
+                .limit(pageable.getPageSize())
+                .fetch();
 
-        List<PlaceListDto> contents = query.fetch();
+        List<Place> countQuery = queryFactory
+                .selectFrom(place)
+                .where(
+                        place.enabled.isTrue(),
+                        placeTypeEq(condition.getPlaceTypeCode()),
+                        largeCategoryEq(condition.getLargeCategoryCode()),
+                        middleCategoryEq(condition.getMiddleCategoryCode()),
+                        tagEq(condition.getTagCode()),
+                        stateEq(condition.getStateCode()),
+                        cityEq(condition.getCityCode()),
+                        nameLike(condition.getName())
+                )
+                .fetch();
 
-        int total = contents.size();
+
+        int total = countQuery.size();
         return PageableExecutionUtils.getPage(contents, pageable, () -> total);
     }
 
