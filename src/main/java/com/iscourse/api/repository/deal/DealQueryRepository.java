@@ -35,6 +35,7 @@ public class DealQueryRepository {
         JPAQuery<DealListDto> query = queryFactory
                 .select(new QDealListDto(deal))
                 .from(deal)
+                .orderBy(deal.id.desc())
                 .where(deal.enabled.eq(true));
 
         List<DealListDto> fetch = query.fetch();
@@ -89,9 +90,11 @@ public class DealQueryRepository {
                 ))
                 .from(deal)
                 .where(
+                        deal.enabled.eq(true),
                         nameLike(condition.getName()),
                         priceBetween(condition.getMinPrice(), condition.getMaxPrice())
                 )
+                .orderBy(deal.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -99,6 +102,7 @@ public class DealQueryRepository {
         List<Deal> countQuery = queryFactory
                 .selectFrom(deal)
                 .where(
+                        deal.enabled.eq(true),
                         nameLike(condition.getName()),
                         priceBetween(condition.getMinPrice(), condition.getMaxPrice())
                 )
