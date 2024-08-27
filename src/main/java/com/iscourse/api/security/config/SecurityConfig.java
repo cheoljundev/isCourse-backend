@@ -36,7 +36,6 @@ public class SecurityConfig {
         http
                 .securityMatcher("/api/**")
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/images/**", "/js/**", "/favicon.*", "/*/icon-*").permitAll()
                         .requestMatchers("/api", "/api/signin", "/api/check-token", "/api/validate-username", "/api/signup", "api/signout", "/api/tag", "/api/deal", "/api/deal/**", "/api/course", "/api/course/**").permitAll()
                         .requestMatchers("/api/manager/**").hasRole("MANAGER")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")

@@ -7,6 +7,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,7 @@ import java.io.File;
 @RequiredArgsConstructor
 public class UploadFileController {
     @Value("${file.dir}") String fileDir;
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/image/deal/{fileName}")
     public ResponseEntity<Resource> downloadDealImage(@PathVariable("fileName") String fileName) {
         String directory = System.getProperty("user.dir") + fileDir + "/deal/";
