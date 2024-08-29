@@ -63,7 +63,7 @@ public class PlaceService {
         queryString.append("&cat1=").append(condition.getLargeCategoryCode() == null ? "" : condition.getLargeCategoryCode());
         queryString.append("&cat2=").append(condition.getMiddleCategoryCode() == null ? "" : condition.getMiddleCategoryCode());
         queryString.append("&cat3=").append(condition.getTagCode() == null ? "" : condition.getTagCode());
-        queryString.append("&pageNo=").append(pageable.getPageNumber());
+        queryString.append("&pageNo=").append(pageable.getPageNumber() + 1);
         queryString.append("&_type=json");
 
         String uri = url + queryString.toString();
@@ -78,13 +78,8 @@ public class PlaceService {
 
         List<ApiResponse.Item> getPlaceList = body.getItems().getItemList();
 
-        List<Place> placeRepositoryAll = placeRepository.findAll();
 
         List<PlaceSelectListDto> filterList = getPlaceList.stream()
-                .filter(
-                        item -> placeRepositoryAll.stream()
-                                .noneMatch(place -> place.getName().equals(item.getName()))
-                )
                 .map(item -> {
                     PlaceSelectListDto placeSelectListDto = new PlaceSelectListDto(item);
                     return placeSelectListDto;

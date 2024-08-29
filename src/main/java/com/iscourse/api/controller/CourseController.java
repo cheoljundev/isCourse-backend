@@ -107,6 +107,11 @@ public class CourseController {
         return placeQueryRepository.adminList(condition, pageable);
     }
 
+    @PostMapping("manager/place")
+    public void addPlace(@RequestBody List<AddPlaceDto> addPlaceDtoList) {
+        placeQueryRepository.addPlace(addPlaceDtoList);
+    }
+
     @DeleteMapping("manager/place/{id}")
     public void deletePlace(@PathVariable("id") Long id) {
         placeService.deletePlace(id);
@@ -123,18 +128,18 @@ public class CourseController {
     }
 
     @GetMapping("manager/large-category")
-    public List<LargeCategoryDto> getLargeCategory(@RequestParam("parent") Long parentId) {
-        return placeQueryRepository.getLargeCategory(parentId);
+    public List<LargeCategoryDto> getLargeCategory(@RequestParam("parent") String parentCode) {
+        return placeQueryRepository.getLargeCategory(parentCode);
     }
 
     @GetMapping("manager/middle-category")
-    public List<MiddleCategoryDto> getMiddleCategory(@RequestParam("parent") Long parentId) {
-        return placeQueryRepository.getMiddleCategory(parentId);
+    public List<MiddleCategoryDto> getMiddleCategory(@RequestParam("parent") String parentCode) {
+        return placeQueryRepository.getMiddleCategory(parentCode);
     }
 
     @GetMapping("manager/tag")
-    public List<TagDto> getTag(@RequestParam("parent") Long parentId) {
-        return placeQueryRepository.getTags(parentId);
+    public List<TagDto> getTag(@RequestParam("parent") String parentCode) {
+        return placeQueryRepository.getTags(parentCode);
     }
 
     @GetMapping("manager/state")
@@ -143,8 +148,8 @@ public class CourseController {
     }
 
     @GetMapping("manager/city")
-    public List<CityDto> getCity(@RequestParam("parent") Long parentId) {
-        return placeQueryRepository.getCity(parentId);
+    public List<CityDto> getCity(@RequestParam("parent") String parentCode) {
+        return placeQueryRepository.getCity(parentCode);
     }
 
 

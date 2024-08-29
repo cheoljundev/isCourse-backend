@@ -1,24 +1,28 @@
 package com.iscourse.api.repository.course;
 
 import com.iscourse.api.controller.dto.course.PlaceSearchConditionDto;
-import com.iscourse.api.domain.course.Place;
-import com.iscourse.api.domain.course.QCity;
-import com.iscourse.api.domain.course.QState;
+import com.iscourse.api.domain.QTag;
+import com.iscourse.api.domain.Tag;
+import com.iscourse.api.domain.course.*;
 import com.iscourse.api.domain.course.dto.*;
 import com.iscourse.api.domain.dto.QTagDto;
 import com.iscourse.api.domain.dto.TagDto;
+import com.iscourse.api.repository.TagRepository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.iscourse.api.domain.QTag.tag;
+import static com.iscourse.api.domain.course.QCity.*;
 import static com.iscourse.api.domain.course.QCity.city;
 import static com.iscourse.api.domain.course.QLargeCategory.largeCategory;
 import static com.iscourse.api.domain.course.QMiddleCategory.middleCategory;
@@ -26,10 +30,18 @@ import static com.iscourse.api.domain.course.QPlace.place;
 import static com.iscourse.api.domain.course.QPlaceType.placeType;
 import static com.iscourse.api.domain.course.QState.state;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class PlaceQueryRepository {
     private final JPAQueryFactory queryFactory;
+    private final PlaceTypeRepository placeTypeRepository;
+    private final LargeCategoryRepository largeCategoryRepository;
+    private final MiddleCategoryRepository middleCategoryRepository;
+    private final TagRepository tagRepository;
+    private final StateRepository stateRepository;
+    private final CityRepository cityRepository;
+    private final PlaceRepository placeRepository;
 
     public Page<PlaceListDto> adminList(PlaceSearchConditionDto condition, Pageable pageable) {
         List<PlaceListDto> contents = queryFactory
@@ -82,36 +94,36 @@ public class PlaceQueryRepository {
                 .fetch();
     }
 
-    public List<LargeCategoryDto> getLargeCategory(Long parentId) {
+    public List<LargeCategoryDto> getLargeCategory(String parentCode) {
         return queryFactory
                 .select(new QLargeCategoryDto(
                         largeCategory.code,
                         largeCategory.name
                 ))
                 .from(largeCategory)
-                .where(largeCategory.parent.id.eq(parentId))
+                .where(largeCategory.parent.code.eq(parentCode))
                 .fetch();
     }
 
-    public List<MiddleCategoryDto> getMiddleCategory(Long parentId) {
+    public List<MiddleCategoryDto> getMiddleCategory(String parentCode) {
         return queryFactory
                 .select(new QMiddleCategoryDto(
                         middleCategory.code,
                         middleCategory.name
                 ))
                 .from(middleCategory)
-                .where(middleCategory.parent.id.eq(parentId))
+                .where(middleCategory.parent.code.eq(parentCode))
                 .fetch();
     }
 
-    public List<TagDto> getTags(Long parentId) {
+    public List<TagDto> getTags(String parentCode) {
         return queryFactory
                 .select(new QTagDto(
                         tag.code,
                         tag.name
                 ))
                 .from(tag)
-                .where(tag.parent.id.eq(parentId))
+                .where(tag.parent.code.eq(parentCode))
                 .fetch();
     }
 
@@ -123,6 +135,73 @@ public class PlaceQueryRepository {
                 ))
                 .from(state)
                 .fetch();
+    }
+
+    public List<CityDto> getCity(String parentCode) {
+        return queryFactory
+                .select(new QCityDto(
+                        city.code,
+                        city.name
+                ))
+                .from(city)
+                .where(city.parent.code.eq(parentCode))
+                .fetch();
+    }
+
+    public void addPlace(List<AddPlaceDto> addPlaceDtoList) {
+        for (AddPlaceDto addPlaceDto : addPlaceDtoList) {
+            PlaceType placeType = placeTypeRepository.findByCode(addPlaceDto.getPlaceTypeCode());
+            LargeCategory largeCategory = queryFactory
+                    .selectFrom(QLargeCategory.largeCategory)
+                    .where(
+                            QLargeCategory.largeCategory.code.eq(addPlaceDto.getLargeCategoryCode()),
+                            QLargeCategory.largeCategory.parent.code.eq(addPlaceDto.getPlaceTypeCode())
+                    )
+                    .fetchFirst();
+            MiddleCategory middleCategory = queryFactory
+                    .selectFrom(QMiddleCategory.middleCategory)
+                    .where(
+                            QMiddleCategory.middleCategory.code.eq(addPlaceDto.getMiddleCategoryCode()),
+                            QMiddleCategory.middleCategory.parent.code.eq(addPlaceDto.getLargeCategoryCode())
+                    )
+                    .fetchFirst();
+            Tag tag = queryFactory
+                    .selectFrom(QTag.tag)
+                    .where(
+                            QTag.tag.code.eq(addPlaceDto.getTagCode()),
+                            QTag.tag.parent.code.eq(addPlaceDto.getMiddleCategoryCode())
+                    )
+                    .fetchFirst();
+            State state = stateRepository.findByCode(addPlaceDto.getStateCode());
+            City city = queryFactory
+                    .selectFrom(QCity.city)
+                    .where(
+                            QCity.city.code.eq(addPlaceDto.getCityCode()),
+                            QCity.city.parent.code.eq(addPlaceDto.getStateCode())
+                    )
+                    .fetchFirst();
+            Optional<Place> findPlace = placeRepository.findByName(addPlaceDto.getTitle());
+            if (findPlace.isEmpty()) {
+                Place place = new Place(
+                        placeType,
+                        addPlaceDto.getTitle(),
+                        largeCategory,
+                        middleCategory,
+                        tag,
+                        state,
+                        city,
+                        addPlaceDto.getAddress1(),
+                        addPlaceDto.getAddress2(),
+                        addPlaceDto.getZipcode(),
+                        addPlaceDto.getMapx(),
+                        addPlaceDto.getMapy(),
+                        addPlaceDto.getTel(),
+                        addPlaceDto.getImage()
+                );
+                placeRepository.save(place);
+            }
+        }
+
     }
 
     private BooleanExpression placeTypeEq(String placeTypeCode) {
@@ -151,16 +230,5 @@ public class PlaceQueryRepository {
 
     private BooleanExpression nameLike(String name) {
         return name != null ? place.name.contains(name) : null;
-    }
-
-    public List<CityDto> getCity(Long parentId) {
-        return queryFactory
-                .select(new QCityDto(
-                        city.code,
-                        city.name
-                ))
-                .from(city)
-                .where(city.parent.id.eq(parentId))
-                .fetch();
     }
 }
