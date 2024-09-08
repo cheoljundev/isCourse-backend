@@ -20,12 +20,10 @@ public class CourseFrontListDto {
     private List<String> tags = new ArrayList<>();
 
     @QueryProjection
-    public CourseFrontListDto(Course course, String state, String image) {
+    public CourseFrontListDto(Course course) {
         this.id = course.getId();
         this.name = course.getName();
         this.time = course.getHour() + "시간 " + course.getMinute() + "분";
-        this.state = state;
-        this.image = image;
         this.courseType = course.getCourseType();
         this.likes = course.getLikes();
     }

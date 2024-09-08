@@ -10,7 +10,6 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -66,17 +65,7 @@ public class CourseQueryRepository {
     public Page<CourseFrontListDto> frontList(Pageable pageable) {
         List<CourseFrontListDto> contents = queryFactory
                 .select(new QCourseFrontListDto(
-                        course,
-                        JPAExpressions
-                                .select(coursePlace.place.state.name)
-                                .from(coursePlace)
-                                .where(coursePlace.course.id.eq(course.id))
-                                .limit(1),
-                        JPAExpressions
-                                .select(coursePlace.place.image)
-                                .from(coursePlace)
-                                .where(coursePlace.course.id.eq(course.id))
-                                .limit(1)
+                        course
                 ))
                 .from(course)
                 .where(course.courseType.eq(MemberRoleType.ROLE_USER), course.enabled.eq(true))
@@ -91,6 +80,16 @@ public class CourseQueryRepository {
                     .where(courseTag.course.id.eq(courseFrontListDto.getId()), courseTag.enabled.eq(true))
                     .fetch();
             tags.forEach(tag -> courseFrontListDto.getTags().add(tag.getName()));
+            courseFrontListDto.setState(queryFactory
+                    .select(coursePlace.place.state.name)
+                    .from(coursePlace)
+                    .where(coursePlace.course.id.eq(courseFrontListDto.getId()))
+                    .fetchFirst());
+            courseFrontListDto.setImage(queryFactory
+                    .select(coursePlace.place.image)
+                    .from(coursePlace)
+                    .where(coursePlace.course.id.eq(courseFrontListDto.getId()))
+                    .fetchFirst());
         });
 
         List<Course> countQuery = queryFactory
@@ -107,17 +106,7 @@ public class CourseQueryRepository {
 
         List<CourseFrontListDto> contents = queryFactory
                 .select(new QCourseFrontListDto(
-                        course,
-                        JPAExpressions
-                                .select(coursePlace.place.state.name)
-                                .from(coursePlace)
-                                .where(coursePlace.course.id.eq(course.id))
-                                .limit(1),
-                        JPAExpressions
-                                .select(coursePlace.place.image)
-                                .from(coursePlace)
-                                .where(coursePlace.course.id.eq(course.id))
-                                .limit(1)
+                        course
                 ))
                 .from(course)
                 .where(course.createdBy.id.eq(memberId), course.enabled.eq(true))
@@ -132,6 +121,16 @@ public class CourseQueryRepository {
                     .where(courseTag.course.id.eq(courseFrontListDto.getId()), courseTag.enabled.eq(true))
                     .fetch();
             tags.forEach(tag -> courseFrontListDto.getTags().add(tag.getName()));
+            courseFrontListDto.setState(queryFactory
+                    .select(coursePlace.place.state.name)
+                    .from(coursePlace)
+                    .where(coursePlace.course.id.eq(courseFrontListDto.getId()))
+                    .fetchFirst());
+            courseFrontListDto.setImage(queryFactory
+                    .select(coursePlace.place.image)
+                    .from(coursePlace)
+                    .where(coursePlace.course.id.eq(courseFrontListDto.getId()))
+                    .fetchFirst());
         });
 
         List<Course> countQuery = queryFactory
@@ -153,23 +152,32 @@ public class CourseQueryRepository {
 
         List<CourseFrontListDto> contents = queryFactory
                 .select(new QCourseFrontListDto(
-                        course,
-                        JPAExpressions
-                                .select(coursePlace.place.state.name)
-                                .from(coursePlace)
-                                .where(coursePlace.course.id.eq(course.id))
-                                .limit(1),
-                        JPAExpressions
-                                .select(coursePlace.place.image)
-                                .from(coursePlace)
-                                .where(coursePlace.course.id.eq(course.id))
-                                .limit(1)
+                        course
                 ))
                 .from(course)
                 .where(course.courseType.eq(MemberRoleType.ROLE_MANAGER), course.enabled.eq(true), distance.loe(maxDistance))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+
+        contents.forEach(courseFrontListDto -> {
+            List<Tag> tags = queryFactory
+                    .select(courseTag.tag)
+                    .from(courseTag)
+                    .where(courseTag.course.id.eq(courseFrontListDto.getId()), courseTag.enabled.eq(true))
+                    .fetch();
+            tags.forEach(tag -> courseFrontListDto.getTags().add(tag.getName()));
+            courseFrontListDto.setState(queryFactory
+                    .select(coursePlace.place.state.name)
+                    .from(coursePlace)
+                    .where(coursePlace.course.id.eq(courseFrontListDto.getId()))
+                    .fetchFirst());
+            courseFrontListDto.setImage(queryFactory
+                    .select(coursePlace.place.image)
+                    .from(coursePlace)
+                    .where(coursePlace.course.id.eq(courseFrontListDto.getId()))
+                    .fetchFirst());
+        });
 
         List<Course> countQuery = queryFactory
                 .selectFrom(course)
