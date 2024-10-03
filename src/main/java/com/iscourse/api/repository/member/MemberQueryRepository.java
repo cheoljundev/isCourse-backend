@@ -4,10 +4,7 @@ import com.iscourse.api.controller.dto.member.MemberSearchCondition;
 import com.iscourse.api.domain.Tag;
 import com.iscourse.api.domain.dto.QTagDto;
 import com.iscourse.api.domain.dto.TagDto;
-import com.iscourse.api.domain.member.GenderType;
-import com.iscourse.api.domain.member.Member;
-import com.iscourse.api.domain.member.MemberInterest;
-import com.iscourse.api.domain.member.MemberRole;
+import com.iscourse.api.domain.member.*;
 import com.iscourse.api.domain.member.dto.*;
 import com.iscourse.api.repository.TagRepository;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -46,12 +43,13 @@ public class MemberQueryRepository {
                 .select(new QMemberListDto(
                         member.id,
                         member.username,
-                        member.nickname
+                        member.nickname,
+                        member.gender
                 ))
                 .from(member)
                 .where(
                         usernameEq(condition.getUsername()),
-                        nicknameEq(condition.getNickname()),
+                        nicknameLike(condition.getNickname()),
                         genderEq(condition.getGenderType()),
                         member.enabled.isTrue()
                 )
@@ -59,11 +57,20 @@ public class MemberQueryRepository {
                 .limit(pageable.getPageSize())
                 .fetch();
 
+        contents.forEach(memberListDto -> {
+            List<MemberRoleType> roles = queryFactory
+                    .select(memberRole.roleType)
+                    .from(memberRole)
+                    .where(memberRole.member.id.eq(memberListDto.getId()))
+                    .fetch();
+            memberListDto.setRoles(roles);
+        });
+
         List<Member> countQuery = queryFactory
                 .selectFrom(member)
                 .where(
                         usernameEq(condition.getUsername()),
-                        nicknameEq(condition.getNickname()),
+                        nicknameLike(condition.getNickname()),
                         genderEq(condition.getGenderType()),
                         member.enabled.isTrue()
                 )
@@ -79,8 +86,8 @@ public class MemberQueryRepository {
         return username == null ? null : member.username.eq(username);
     }
 
-    private BooleanExpression nicknameEq(String nickname) {
-        return nickname == null ? null : member.nickname.eq(nickname);
+    private BooleanExpression nicknameLike(String nickname) {
+        return nickname == null ? null : member.nickname.contains(nickname);
     }
 
     private BooleanExpression genderEq(GenderType genderType) {

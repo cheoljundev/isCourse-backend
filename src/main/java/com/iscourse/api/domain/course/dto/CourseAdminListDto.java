@@ -13,10 +13,9 @@ public class CourseAdminListDto {
     private MemberRoleType courseType;
 
     @QueryProjection
-    public CourseAdminListDto(Course course, String state, String image) {
+    public CourseAdminListDto(Course course) {
         this.id = course.getId();
         this.name = course.getName();
-        this.image = image;
         this.courseType = course.getCourseType();
     }
 }

@@ -226,17 +226,7 @@ public class CourseQueryRepository {
 
         List<CourseAdminListDto> contents = queryFactory
                 .select(new QCourseAdminListDto(
-                        course,
-                        JPAExpressions
-                                .select(coursePlace.place.state.name)
-                                .from(coursePlace)
-                                .where(coursePlace.course.id.eq(course.id))
-                                .limit(1),
-                        JPAExpressions
-                                .select(coursePlace.place.image)
-                                .from(coursePlace)
-                                .where(coursePlace.course.id.eq(course.id))
-                                .limit(1)
+                        course
                 ))
                 .from(course)
                 .where(
@@ -248,6 +238,14 @@ public class CourseQueryRepository {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+
+        contents.forEach(courseAdminListDto -> {
+            courseAdminListDto.setImage(queryFactory
+                    .select(coursePlace.place.image)
+                    .from(coursePlace)
+                    .where(coursePlace.course.id.eq(courseAdminListDto.getId()))
+                    .fetchFirst());
+                });
 
         List<Course> countQuery = queryFactory
                 .selectFrom(course)
